@@ -121,8 +121,6 @@ export function NewAnalysisModal({ isOpen, onClose }: Props) {
               />
             </div>
           </div>
-
-          </div>
         </form>
         </div>
         
