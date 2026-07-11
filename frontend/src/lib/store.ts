@@ -39,6 +39,14 @@ interface AppState {
   graphData: { nodes: GraphNode[], links: GraphEdge[] };
   setGraphData: (data: { nodes: GraphNode[], links: GraphEdge[] }) => void;
 
+  // New Modules State
+  trials: any[];
+  setTrials: (trials: any[]) => void;
+  protocols: any[];
+  setProtocols: (protocols: any[]) => void;
+  registryItems: any[];
+  setRegistryItems: (items: any[]) => void;
+
   // Agent State
   agentStep: 'planning' | 'retrieval' | 'analysis' | 'drafting' | 'completed' | 'error' | 'idle';
   setAgentStep: (step: AppState['agentStep']) => void;
@@ -55,6 +63,13 @@ export const useStore = create<AppState>((set) => ({
   
   graphData: { nodes: [], links: [] },
   setGraphData: (data) => set({ graphData: data }),
+
+  trials: [],
+  setTrials: (trials) => set({ trials }),
+  protocols: [],
+  setProtocols: (protocols) => set({ protocols }),
+  registryItems: [],
+  setRegistryItems: (items) => set({ registryItems: items }),
 
   agentStep: 'idle',
   setAgentStep: (step) => set({ agentStep: step })

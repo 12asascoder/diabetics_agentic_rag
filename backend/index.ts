@@ -6,6 +6,10 @@ import authRoutes from './routes/authRoutes';
 import uploadRoutes from './routes/uploadRoutes';
 import agentRoutes from './routes/agentRoutes';
 import workspaceRoutes from './routes/workspaceRoutes';
+import trialRoutes from './routes/trialRoutes';
+import protocolRoutes from './routes/protocolRoutes';
+import registryRoutes from './routes/registryRoutes';
+import collaborationRoutes from './routes/collaborationRoutes';
 import { env, validateEnv } from './config/env';
 
 // Validate environment variables on startup
@@ -39,6 +43,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/agents', agentRoutes);
 app.use('/api/workspaces', workspaceRoutes);
+app.use('/api/trials', trialRoutes);
+app.use('/api/protocols', protocolRoutes);
+app.use('/api/registry', registryRoutes);
+app.use('/api/collaboration', collaborationRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
