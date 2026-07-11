@@ -1,7 +1,31 @@
+"use client";
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { FlaskConical, ChevronRight, Activity, FileCheck, Database, LineChart } from 'lucide-react';
 
 export default function LandingPage() {
+  const [activeModal, setActiveModal] = useState<'platform' | 'solutions' | 'resources' | 'company' | null>(null);
+
+  const modalContent = {
+    platform: {
+      title: "The First AI-Native Diabetes Intelligence Engine",
+      body: "Traditional research is bottlenecked by siloed EHR systems and disconnected trial data. Our platform unifies multimodal data streams—from genomic markers to real-world continuous glucose monitor (CGM) data—into a single, highly interactive knowledge graph. Stop wrangling data and start generating insights."
+    },
+    solutions: {
+      title: "Built for the Rigors of Endocrinology",
+      body: "Whether you are a Principal Investigator managing a multi-center Phase 3 trial or an institutional researcher synthesizing real-world evidence for SGLT2 inhibitors, DiaResearch IQ provides tailored, automated pipelines. We turn raw clinical protocol documents and raw CSV registries into searchable, actionable intelligence in seconds."
+    },
+    resources: {
+      title: "Open Standards, Endless Extensibility",
+      body: "We believe in interoperability. Access our comprehensive FHIR API documentation, whitepapers on our proprietary RAG (Retrieval-Augmented Generation) ingestion pipelines, and open-source models for predictive patient stratification. Your data is always portable."
+    },
+    company: {
+      title: "We are DiaResearch IQ",
+      body: "Born from a frustration with outdated health-tech interfaces, we are a fast-moving AI startup on a mission to accelerate diabetes research. We believe that researchers shouldn't have to be data engineers. By bringing sleek, consumer-grade UI to enterprise healthcare, we are bridging the gap between complex science and intuitive design."
+    }
+  };
+
   return (
     <div className="min-h-screen bg-neutral flex flex-col font-sans relative">
       {/* Faint Background Grid */}
@@ -19,10 +43,10 @@ export default function LandingPage() {
           <span>DiaResearch IQ</span>
         </div>
         <nav className="hidden md:flex gap-8 items-center text-sm font-medium text-secondary">
-          <Link href="#" className="hover:text-primary transition-colors">Platform</Link>
-          <Link href="#" className="hover:text-primary transition-colors">Solutions</Link>
-          <Link href="#" className="hover:text-primary transition-colors">Resources</Link>
-          <Link href="#" className="hover:text-primary transition-colors">Company</Link>
+          <button onClick={() => setActiveModal('platform')} className="hover:text-primary transition-colors focus:outline-none">Platform</button>
+          <button onClick={() => setActiveModal('solutions')} className="hover:text-primary transition-colors focus:outline-none">Solutions</button>
+          <button onClick={() => setActiveModal('resources')} className="hover:text-primary transition-colors focus:outline-none">Resources</button>
+          <button onClick={() => setActiveModal('company')} className="hover:text-primary transition-colors focus:outline-none">Company</button>
         </nav>
         <div className="flex items-center gap-6 text-sm font-bold">
           <Link href="/login" className="text-primary hover:underline">Log In</Link>
@@ -231,6 +255,45 @@ export default function LandingPage() {
           <span>DiaResearch IQ</span>
         </div>
       </footer>
+
+      {/* Startup Pitch Modal */}
+      {activeModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in">
+          <div className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm" onClick={() => setActiveModal(null)} />
+          
+          <div className="relative w-full max-w-2xl bg-white/70 backdrop-blur-2xl border border-white/40 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.15)] rounded-3xl p-10 overflow-hidden transform transition-all animate-slide-up">
+            {/* Neomorphic internal glow */}
+            <div className="absolute inset-0 rounded-3xl pointer-events-none shadow-[inset_0_0_32px_rgba(255,255,255,0.8)]" />
+            
+            {/* Decorative colored glow blobs */}
+            <div className="absolute -top-20 -left-20 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-indigo-400/20 rounded-full blur-3xl pointer-events-none" />
+            
+            <div className="relative z-10 flex flex-col items-center text-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-primary to-blue-400 text-white flex items-center justify-center mb-6 shadow-xl shadow-blue-500/30">
+                <FlaskConical size={32} />
+              </div>
+              
+              <h3 className="text-3xl font-heading font-bold text-gray-900 mb-4 tracking-tight">
+                {modalContent[activeModal].title}
+              </h3>
+              
+              <p className="text-lg text-gray-600 leading-relaxed mb-10 max-w-xl">
+                {modalContent[activeModal].body}
+              </p>
+              
+              <div className="flex gap-4 w-full sm:w-auto">
+                <Link href="/login" onClick={() => setActiveModal(null)} className="flex-1 sm:flex-none bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/30">
+                  Create Account / View Demo
+                </Link>
+                <button onClick={() => setActiveModal(null)} className="flex-1 sm:flex-none bg-white/50 text-gray-700 border border-gray-200/50 px-8 py-4 rounded-xl font-bold hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-sm backdrop-blur-md">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
