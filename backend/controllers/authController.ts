@@ -2,9 +2,10 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Researcher from '../models/Researcher';
+import { env } from '../config/env';
 
 const generateToken = (id: string) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET_KEY || 'development_secret_key', {
+  return jwt.sign({ id }, env.JWT_SECRET_KEY, {
     expiresIn: '30d',
   });
 };
@@ -41,7 +42,7 @@ export const registerResearcher = async (req: Request, res: Response): Promise<v
       // Set JWT in HTTPOnly cookie
       res.cookie('jwt', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
+        secure: env.NODE_ENV !== 'development', // Use secure cookies in production
         sameSite: 'lax',
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       });
@@ -71,7 +72,7 @@ export const loginResearcher = async (req: Request, res: Response): Promise<void
       
       res.cookie('jwt', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV !== 'development',
+        secure: env.NODE_ENV !== 'development',
         sameSite: 'lax',
         maxAge: 30 * 24 * 60 * 60 * 1000,
       });
