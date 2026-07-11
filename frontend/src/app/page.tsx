@@ -1,101 +1,75 @@
 import Link from 'next/link';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Activity, BrainCircuit, Database } from 'lucide-react';
+import { Brain, ArrowRight, Activity, ShieldCheck, Database } from 'lucide-react';
 
-export default function Dashboard() {
+export default function Home() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#1a1a1e] text-slate-900 dark:text-slate-100 p-8 font-sans">
-      <header className="mb-12 flex justify-between items-center">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight text-[#1a1a1e] dark:text-ivory">Diabetes Research Intelligence Platform</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2 text-lg">Agentic Retrieval-Augmented Clinical Decision Support</p>
+    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans selection:bg-blue-500/30">
+      <header className="px-8 py-6 flex justify-between items-center border-b border-gray-800/50 backdrop-blur-md sticky top-0 z-50">
+        <div className="flex items-center gap-3">
+          <div className="bg-blue-600 p-2 rounded-lg">
+            <Brain className="text-white" size={24} />
+          </div>
+          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            Diabetes AI Platform
+          </h1>
         </div>
-        <div className="flex gap-4">
-          <Badge variant="outline" className="text-indigo-600 border-indigo-600 bg-indigo-50 dark:bg-indigo-950 dark:text-indigo-300">
-            System Online
-          </Badge>
-        </div>
+        <nav className="flex gap-6 items-center text-sm font-medium">
+          <Link href="/about" className="text-gray-400 hover:text-white transition-colors">Platform</Link>
+          <Link href="/security" className="text-gray-400 hover:text-white transition-colors">Security</Link>
+          <Link href="/workspaces" className="bg-white text-black px-5 py-2 rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2">
+            Enter Platform <ArrowRight size={16} />
+          </Link>
+        </nav>
       </header>
 
-      <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <Link href="/explorer" className="block transition-transform hover:-translate-y-1">
-          <Card className="h-full border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 bg-white dark:bg-[#232328] shadow-sm">
-            <CardHeader>
-              <FileText className="w-8 h-8 text-indigo-500 mb-2" />
-              <CardTitle>Document Explorer</CardTitle>
-              <CardDescription>Browse parsed clinical trials and datasets.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-light">142</p>
-              <p className="text-xs text-slate-400">Indexed Documents</p>
-            </CardContent>
-          </Card>
-        </Link>
+      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 py-32 relative overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <Link href="/assistant" className="block transition-transform hover:-translate-y-1">
-          <Card className="h-full border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 bg-white dark:bg-[#232328] shadow-sm">
-            <CardHeader>
-              <BrainCircuit className="w-8 h-8 text-indigo-500 mb-2" />
-              <CardTitle>AI Research Assistant</CardTitle>
-              <CardDescription>Query your knowledge base with Agentic RAG.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-light">Ready</p>
-              <p className="text-xs text-slate-400">Multi-document reasoning active</p>
-            </CardContent>
-          </Card>
-        </Link>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-400 border border-blue-800/50 mb-8 text-sm font-medium">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+          </span>
+          Publication-Grade Research Engine v2.0
+        </div>
 
-        <Link href="/treatment" className="block transition-transform hover:-translate-y-1">
-          <Card className="h-full border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 bg-white dark:bg-[#232328] shadow-sm">
-            <CardHeader>
-              <Activity className="w-8 h-8 text-indigo-500 mb-2" />
-              <CardTitle>Treatment Intelligence</CardTitle>
-              <CardDescription>Compare approaches and outcomes.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-light">12</p>
-              <p className="text-xs text-slate-400">Active comparisons</p>
-            </CardContent>
-          </Card>
-        </Link>
+        <h2 className="text-5xl md:text-7xl font-bold max-w-4xl tracking-tight mb-8 leading-tight">
+          Accelerating <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Diabetes Research</span> through Multi-Agent AI
+        </h2>
+        
+        <p className="text-xl text-gray-400 max-w-2xl mb-12 leading-relaxed">
+          The next-generation clinical intelligence platform. Featuring hybrid RAG, hierarchical evidence extraction, and real-time knowledge graph generation.
+        </p>
 
-        <Link href="/evidence" className="block transition-transform hover:-translate-y-1">
-          <Card className="h-full border-slate-200 dark:border-slate-800 hover:border-indigo-500/50 dark:hover:border-indigo-400/50 bg-white dark:bg-[#232328] shadow-sm">
-            <CardHeader>
-              <Database className="w-8 h-8 text-indigo-500 mb-2" />
-              <CardTitle>Evidence Graph</CardTitle>
-              <CardDescription>Visualize research findings and pathways.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-3xl font-light">3.4k</p>
-              <p className="text-xs text-slate-400">Evidence Nodes</p>
-            </CardContent>
-          </Card>
-        </Link>
-      </main>
+        <div className="flex gap-4">
+          <Link href="/workspaces" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-all hover:shadow-lg hover:shadow-blue-600/25 flex items-center gap-2">
+            Launch Workspaces <ArrowRight size={18} />
+          </Link>
+          <button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-full font-medium transition-colors border border-gray-700">
+            View Architecture
+          </button>
+        </div>
 
-      <section className="mt-8">
-        <h2 className="text-2xl font-semibold mb-6">Recent Research Activity</h2>
-        <div className="bg-white dark:bg-[#232328] border border-slate-200 dark:border-slate-800 rounded-lg p-6">
-          <div className="space-y-4">
-            {[
-              { title: 'GLP-1 vs SGLT2i Outcomes', type: 'Query', time: '2 hours ago' },
-              { title: 'UKPDS 33 Long-term Follow-up', type: 'Document Processed', time: '5 hours ago' },
-              { title: 'Cardiovascular Risk Meta-analysis', type: 'Treatment Comparison', time: '1 day ago' },
-            ].map((activity, i) => (
-              <div key={i} className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4 last:border-0 last:pb-0">
-                <div>
-                  <p className="font-medium">{activity.title}</p>
-                  <p className="text-sm text-slate-500">{activity.type}</p>
-                </div>
-                <span className="text-sm text-slate-400">{activity.time}</span>
-              </div>
-            ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-32 max-w-5xl text-left w-full">
+          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+            <Activity className="text-blue-400 mb-4" size={32} />
+            <h3 className="text-lg font-semibold mb-2">Multi-Agent Orchestration</h3>
+            <p className="text-gray-400 text-sm">Specialized agents route queries, evaluate evidence quality, detect contradictions, and synthesize publication-ready drafts.</p>
+          </div>
+          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+            <Database className="text-purple-400 mb-4" size={32} />
+            <h3 className="text-lg font-semibold mb-2">Vector & Graph Fusion</h3>
+            <p className="text-gray-400 text-sm">Combines ChromaDB semantic similarity with explicit entity extraction to build navigable medical knowledge graphs.</p>
+          </div>
+          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
+            <ShieldCheck className="text-green-400 mb-4" size={32} />
+            <h3 className="text-lg font-semibold mb-2">Clinical Safety First</h3>
+            <p className="text-gray-400 text-sm">Strict provenance tracking linking all generated claims directly to underlying document chunk IDs and metadata.</p>
           </div>
         </div>
-      </section>
+      </main>
     </div>
   );
 }
