@@ -19,7 +19,17 @@ interface GraphEdge {
   label: string;
 }
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  institution: string;
+}
+
 interface AppState {
+  user: User | null;
+  setUser: (user: User | null) => void;
+  
   currentWorkspace: Workspace | null;
   workspaces: Workspace[];
   setWorkspaces: (workspaces: Workspace[]) => void;
@@ -35,6 +45,9 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+
   currentWorkspace: null,
   workspaces: [],
   setWorkspaces: (workspaces) => set({ workspaces }),

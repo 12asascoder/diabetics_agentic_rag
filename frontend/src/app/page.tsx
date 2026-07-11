@@ -25,9 +25,9 @@ export default function LandingPage() {
           <Link href="#" className="hover:text-primary transition-colors">Company</Link>
         </nav>
         <div className="flex items-center gap-6 text-sm font-bold">
-          <Link href="#" className="text-primary hover:underline">Log In</Link>
-          <Link href="/workspaces" className="bg-primary text-white px-5 py-2.5 rounded hover:bg-primary/90 transition-colors">
-            Request Demo
+          <Link href="/login" className="text-primary hover:underline">Log In</Link>
+          <Link href="/login" className="bg-primary text-white px-5 py-2.5 rounded hover:bg-primary/90 transition-colors">
+            Demo
           </Link>
         </div>
       </header>
@@ -47,7 +47,7 @@ export default function LandingPage() {
         </p>
 
         <div className="flex gap-4 mb-20">
-          <Link href="/workspaces" className="bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm">
+          <Link href="/login" className="bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm">
             Start Researching
           </Link>
           <button className="bg-white text-primary border border-gray-200 px-8 py-3.5 rounded font-medium hover:bg-gray-50 transition-colors shadow-sm">

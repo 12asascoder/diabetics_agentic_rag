@@ -28,8 +28,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
     { label: 'Workspace', href: '/workspaces/dashboard', icon: LayoutDashboard },
     { label: 'Document Library', href: '/library', icon: Library },
     { label: 'Evidence Explorer', href: '/evidence', icon: Microscope },
-    { label: 'Analytics', href: '#', icon: BarChart2 },
-    { label: 'Collaboration', href: '#', icon: Users },
+    { label: 'Analytics', href: '/workspaces/dashboard', icon: BarChart2 },
+    { label: 'Collaboration', href: '/workspaces/dashboard', icon: Users },
   ];
 
   return (
@@ -74,11 +74,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </nav>
 
         <div className="p-4 border-t border-gray-100 space-y-1">
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-sm text-secondary hover:text-primary hover:bg-gray-50 rounded-md transition-colors">
+          <Link href="/workspaces/dashboard" className="flex items-center gap-3 px-3 py-2 text-sm text-secondary hover:text-primary hover:bg-gray-50 rounded-md transition-colors">
             <Settings size={18} className="text-gray-400" />
             Settings
           </Link>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 text-sm text-secondary hover:text-primary hover:bg-gray-50 rounded-md transition-colors">
+          <Link href="/workspaces/dashboard" className="flex items-center gap-3 px-3 py-2 text-sm text-secondary hover:text-primary hover:bg-gray-50 rounded-md transition-colors">
             <HelpCircle size={18} className="text-gray-400" />
             Support
           </Link>
