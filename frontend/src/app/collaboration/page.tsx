@@ -18,7 +18,7 @@ export default function CollaborationPage() {
       try {
         setLoading(true);
         const res = await axios.get('http://localhost:5000/api/collaboration/tasks', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          withCredentials: true
         });
         setTasks(res.data);
       } catch (err: any) {

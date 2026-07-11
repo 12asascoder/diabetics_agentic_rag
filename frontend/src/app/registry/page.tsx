@@ -24,7 +24,7 @@ export default function RegistryPage() {
     try {
       setLoading(true);
       const res = await axios.get('http://localhost:5000/api/registry', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        withCredentials: true
       });
       setRegistryItems(res.data);
     } catch (err: any) {
@@ -38,7 +38,7 @@ export default function RegistryPage() {
     try {
       setSeeding(true);
       await axios.post('http://localhost:5000/api/registry/seed', { workspaceId: '000000000000000000000000' }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        withCredentials: true
       });
       await fetchRegistry();
     } catch (err: any) {

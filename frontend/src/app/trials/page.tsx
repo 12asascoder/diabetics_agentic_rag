@@ -22,9 +22,7 @@ export default function TrialsPage() {
         setLoading(true);
         // We use axios to fetch from our backend which calls Katzilla + DB
         const res = await axios.get('http://localhost:5000/api/trials', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
+          withCredentials: true
         });
         setTrials(res.data);
       } catch (err: any) {

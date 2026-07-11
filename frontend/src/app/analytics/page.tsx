@@ -18,7 +18,7 @@ export default function AnalyticsPage() {
         setLoading(true);
         // We'll use registry data to derive analytics
         const res = await axios.get('http://localhost:5000/api/registry', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          withCredentials: true
         });
         setData(res.data);
       } catch (err) {

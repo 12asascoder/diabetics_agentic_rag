@@ -21,7 +21,7 @@ export default function ProtocolsPage() {
       try {
         setLoading(true);
         const res = await axios.get('http://localhost:5000/api/protocols', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+          withCredentials: true
         });
         setProtocols(res.data);
       } catch (err: any) {
