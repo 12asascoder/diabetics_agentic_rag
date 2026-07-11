@@ -9,6 +9,8 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   MONGO_URI: process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/diabetes_research',
   KATZILLA_API_KEY: process.env.KATZILLA_API_KEY || '',
+  REDIS_HOST: process.env.REDIS_HOST || '127.0.0.1',
+  REDIS_PORT: process.env.REDIS_PORT || '6379',
 };
 
 export const validateEnv = () => {

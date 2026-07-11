@@ -1,6 +1,6 @@
 import { determineRetrievalStrategy } from './routerAgent';
 import { queryKatzilla, KatzillaResult } from '../services/katzillaService';
-import { DocumentNode } from './documentUnderstandingAgent';
+import { DocumentChunk } from './documentUnderstandingAgent';
 
 export interface RetrievedEvidence {
   source: string;
@@ -14,7 +14,7 @@ export interface RetrievedEvidence {
  * Improved retrieval logic combining semantic similarity (mocked via simple overlap for now),
  * keyword relevance, recency, and metadata filtering.
  */
-export const retrieveEvidence = async (query: string, documentNodes: DocumentNode[]): Promise<RetrievedEvidence[]> => {
+export const retrieveEvidence = async (query: string, documentNodes: DocumentChunk[]): Promise<RetrievedEvidence[]> => {
   console.log(`[Retrieval Agent] Initiating retrieval for query: "${query}"`);
   
   const strategy = determineRetrievalStrategy(query);
@@ -47,7 +47,7 @@ export const retrieveEvidence = async (query: string, documentNodes: DocumentNod
   return results;
 };
 
-const retrieveLocal = (query: string, documentNodes: DocumentNode[]): RetrievedEvidence[] => {
+const retrieveLocal = (query: string, documentNodes: DocumentChunk[]): RetrievedEvidence[] => {
   const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
   
   return documentNodes.map(node => {
