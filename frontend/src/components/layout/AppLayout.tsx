@@ -93,17 +93,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
           <h2 className="text-xl font-heading font-bold text-primary w-64 leading-tight">
             Diabetes Research<br/>Intelligence
           </h2>
-          
-          <div className="flex-1 max-w-xl mx-8 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input 
-              type="text" 
-              placeholder="Search trials, protocols, documents..." 
-              className="w-full bg-neutral border border-gray-200 rounded-md pl-9 pr-4 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-            />
-          </div>
 
-          <div className="flex items-end h-full pt-6">
+          <div className="flex items-end h-full pt-6 pr-6">
             {['Dashboard', 'Trials', 'Protocols', 'Registry'].map(tab => (
               <button 
                 key={tab}
@@ -117,6 +108,30 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 {tab}
               </button>
             ))}
+          </div>
+          
+          <div className="flex-1 max-w-sm relative">
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+            <input 
+              type="text" 
+              placeholder="Search across registry..." 
+              className="w-full bg-white border border-gray-200 rounded-md pl-4 pr-9 py-2 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+            />
+          </div>
+
+          <div className="flex items-center gap-4 ml-6">
+            <button className="text-gray-400 hover:text-primary transition-colors">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </button>
+            <button className="bg-primary text-white px-4 py-2 rounded font-medium text-sm hover:bg-primary/90 transition-colors">
+              Export Data
+            </button>
+            <button className="bg-gray-50 border border-gray-200 text-secondary px-4 py-2 rounded font-medium text-sm hover:bg-gray-100 transition-colors">
+              Institution Selector
+            </button>
+            <button className="text-gray-400 hover:text-primary transition-colors border border-gray-200 rounded-full p-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
+            </button>
           </div>
         </header>
 
