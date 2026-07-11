@@ -54,7 +54,13 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set) => ({
-  user: null,
+  user: {
+    _id: '66923b2c1234567890abcdef',
+    name: 'Global Administrator',
+    email: 'admin@diaresearch.iq',
+    institution: 'DiaResearch Global',
+    token: 'mock-jwt-token'
+  },
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),
 

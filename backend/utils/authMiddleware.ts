@@ -16,21 +16,15 @@ declare global {
 }
 
 export const protect = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  let token;
+  // Authentication has been completely removed as per user request.
+  // We attach a mock global administrator to satisfy downstream schema relationships.
+  req.researcher = {
+    _id: '66923b2c1234567890abcdef',
+    name: 'Global Administrator',
+    email: 'admin@diaresearch.iq',
+    institution: 'DiaResearch Global',
+    role: 'admin'
+  };
   
-  if (req.cookies && req.cookies.jwt) {
-      token = req.cookies.jwt;
-  }
-
-  if (token) {
-    try {
-      const decoded = jwt.verify(token, env.JWT_SECRET_KEY) as JwtPayload;
-      req.researcher = await Researcher.findById(decoded.id).select('-passwordHash');
-      next();
-    } catch (error) {
-      res.status(401).json({ message: 'Not authorized, token failed' });
-    }
-  } else {
-    res.status(401).json({ message: 'Not authorized, no token' });
-  }
+  next();
 };

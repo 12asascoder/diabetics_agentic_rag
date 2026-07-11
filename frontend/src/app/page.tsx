@@ -49,9 +49,9 @@ export default function LandingPage() {
           <button onClick={() => setActiveModal('company')} className="hover:text-primary transition-colors focus:outline-none">Company</button>
         </nav>
         <div className="flex items-center gap-3 md:gap-6 text-sm font-bold">
-          <Link href="/login" className="text-primary hover:underline hidden sm:block">Log In</Link>
-          <Link href="/login" className="bg-primary text-white px-4 md:px-5 py-2 md:py-2.5 rounded hover:bg-primary/90 transition-colors">
-            Demo
+          <Link href="/workspaces/dashboard" className="text-primary hover:underline hidden sm:block">Dashboard</Link>
+          <Link href="/workspaces/dashboard" className="bg-primary text-white px-4 md:px-5 py-2 md:py-2.5 rounded hover:bg-primary/90 transition-colors">
+            Enter App
           </Link>
         </div>
       </header>
@@ -71,7 +71,7 @@ export default function LandingPage() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 mb-12 md:mb-20 w-full sm:w-auto">
-          <Link href="/login" className="w-full sm:w-auto text-center bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm min-h-[44px]">
+          <Link href="/workspaces/dashboard" className="w-full sm:w-auto text-center bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm min-h-[44px]">
             Start Researching
           </Link>
           <button className="w-full sm:w-auto bg-white text-primary border border-gray-200 px-8 py-3.5 rounded font-medium hover:bg-gray-50 transition-colors shadow-sm min-h-[44px]">
@@ -283,8 +283,8 @@ export default function LandingPage() {
               </p>
               
               <div className="flex gap-4 w-full sm:w-auto">
-                <Link href="/login" onClick={() => setActiveModal(null)} className="flex-1 sm:flex-none bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/30">
-                  Create Account / View Demo
+                <Link href="/workspaces/dashboard" onClick={() => setActiveModal(null)} className="flex-1 sm:flex-none bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/30">
+                  Enter Dashboard
                 </Link>
                 <button onClick={() => setActiveModal(null)} className="flex-1 sm:flex-none bg-white/50 text-gray-700 border border-gray-200/50 px-8 py-4 rounded-xl font-bold hover:bg-white hover:scale-105 active:scale-95 transition-all shadow-sm backdrop-blur-md">
                   Close

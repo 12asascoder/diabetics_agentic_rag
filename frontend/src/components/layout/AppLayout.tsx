@@ -39,17 +39,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [isNewAnalysisOpen, setIsNewAnalysisOpen] = useState(false);
   const { user, clearUser } = useStore();
 
-  const handleLogout = async () => {
-    try {
-      await axios.post('/api/auth/logout');
-    } catch (e) {
-      console.error(e);
-    } finally {
-      clearUser();
-      router.push('/login');
-    }
-  };
-
   const navItems = [
     { label: 'Workspace', href: '/workspaces/dashboard', icon: LayoutDashboard },
     { label: 'Document Library', href: '/library', icon: Library },
@@ -172,9 +161,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
                       <p className="text-sm font-bold text-primary truncate">{user?.name || 'Guest User'}</p>
                       <p className="text-xs text-secondary truncate mb-1">{user?.email || 'Not logged in'}</p>
                     </div>
-                    <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 text-left">
-                      <LogOut size={16} /> Log Out
-                    </button>
                   </div>
                 </>
               )}
@@ -235,9 +221,6 @@ export default function AppLayout({ children }: AppLayoutProps) {
                       <Link href="/settings" onClick={() => setIsProfileOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm text-secondary hover:bg-gray-50">
                         <Settings size={16} /> Account Settings
                       </Link>
-                      <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 text-left">
-                        <LogOut size={16} /> Log Out
-                      </button>
                     </div>
                   </>
                 )}
