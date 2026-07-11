@@ -5,7 +5,8 @@ import { useStore } from '@/lib/store';
 import { DataTable } from '@/components/ui/DataTable';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { FileSearch, Microscope } from 'lucide-react';
+import { DetailDrawer } from '@/components/ui/DetailDrawer';
+import { FileSearch, Microscope, Download, Bookmark, MessageSquare } from 'lucide-react';
 import axios from 'axios';
 import { format } from 'date-fns';
 
@@ -13,6 +14,7 @@ export default function TrialsPage() {
   const { trials, setTrials } = useStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTrial, setSelectedTrial] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchTrials = async () => {
@@ -118,9 +120,60 @@ export default function TrialsPage() {
           data={trials}
           columns={columns}
           searchKeys={['title', 'trialId', 'sponsor', 'status']}
-          onRowClick={(row) => console.log('View trial details:', row)}
+          onRowClick={(row) => setSelectedTrial(row)}
         />
       )}
+
+      <DetailDrawer
+        isOpen={selectedTrial !== null}
+        onClose={() => setSelectedTrial(null)}
+        title="Trial Details"
+        subtitle={selectedTrial?.trialId}
+        actions={
+          <>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+              <Download size={16} /> Export
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+              <MessageSquare size={16} /> Annotate
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors">
+              <Bookmark size={16} /> Bookmark
+            </button>
+          </>
+        }
+      >
+        {selectedTrial && (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Title</h4>
+              <p className="text-foreground">{selectedTrial.title}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-1">Status</h4>
+                <p className="text-foreground">{selectedTrial.status}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-1">Phase</h4>
+                <p className="text-foreground">{selectedTrial.phase}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-1">Start Date</h4>
+                <p className="text-foreground">{selectedTrial.startDate ? format(new Date(selectedTrial.startDate), 'PPP') : 'Unknown'}</p>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-1">Sponsor</h4>
+                <p className="text-foreground">{selectedTrial.sponsor}</p>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Data Source</h4>
+              <p className="text-xs font-mono bg-gray-100 p-2 rounded text-gray-700">{selectedTrial.source || 'Database'}</p>
+            </div>
+          </div>
+        )}
+      </DetailDrawer>
     </div>
   );
 }

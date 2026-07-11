@@ -5,7 +5,8 @@ import { useStore } from '@/lib/store';
 import { DataTable } from '@/components/ui/DataTable';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { FileText, PlusCircle } from 'lucide-react';
+import { DetailDrawer } from '@/components/ui/DetailDrawer';
+import { FileText, PlusCircle, Download, CheckCircle, FileSignature } from 'lucide-react';
 import axios from 'axios';
 import { format } from 'date-fns';
 
@@ -13,6 +14,7 @@ export default function ProtocolsPage() {
   const { protocols, setProtocols } = useStore();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedProtocol, setSelectedProtocol] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchProtocols = async () => {
@@ -91,8 +93,70 @@ export default function ProtocolsPage() {
           onPrimaryAction={() => console.log('Create protocol')}
         />
       ) : (
-        <DataTable data={protocols} columns={columns} searchKeys={['title', 'ethicsApprovalStatus']} />
+        <DataTable 
+          data={protocols} 
+          columns={columns} 
+          searchKeys={['title', 'ethicsApprovalStatus']} 
+          onRowClick={(row) => setSelectedProtocol(row)}
+        />
       )}
+
+      <DetailDrawer
+        isOpen={selectedProtocol !== null}
+        onClose={() => setSelectedProtocol(null)}
+        title="Protocol Details"
+        subtitle={`Version ${selectedProtocol?.version}`}
+        actions={
+          <>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+              <Download size={16} /> Export PDF
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+              <FileSignature size={16} /> Request Review
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors">
+              <CheckCircle size={16} /> Approve
+            </button>
+          </>
+        }
+      >
+        {selectedProtocol && (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Title</h4>
+              <p className="text-foreground">{selectedProtocol.title}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Description</h4>
+              <p className="text-foreground text-sm leading-relaxed">{selectedProtocol.description || 'No description provided.'}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-1">Status</h4>
+                <span className={`px-2 py-1 rounded text-xs font-medium ${
+                  selectedProtocol.ethicsApprovalStatus === 'Approved' ? 'bg-emerald-50 text-emerald-700' :
+                  selectedProtocol.ethicsApprovalStatus === 'Rejected' ? 'bg-red-50 text-red-700' :
+                  'bg-amber-50 text-amber-700'
+                }`}>
+                  {selectedProtocol.ethicsApprovalStatus}
+                </span>
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-1">Sample Size</h4>
+                <p className="text-foreground">{selectedProtocol.sampleSize}</p>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Inclusion Criteria</h4>
+              <div className="flex gap-2 flex-wrap">
+                {selectedProtocol.inclusionCriteria?.length > 0 ? selectedProtocol.inclusionCriteria.map((t: string) => (
+                  <span key={t} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">{t}</span>
+                )) : <span className="text-sm text-secondary">None specified</span>}
+              </div>
+            </div>
+          </div>
+        )}
+      </DetailDrawer>
     </div>
   );
 }

@@ -5,7 +5,8 @@ import { useStore } from '@/lib/store';
 import { DataTable } from '@/components/ui/DataTable';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
-import { Users, FileSpreadsheet, PlayCircle } from 'lucide-react';
+import { DetailDrawer } from '@/components/ui/DetailDrawer';
+import { Users, FileSpreadsheet, PlayCircle, Download, FileText, Tag } from 'lucide-react';
 import axios from 'axios';
 
 export default function RegistryPage() {
@@ -13,6 +14,7 @@ export default function RegistryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   useEffect(() => {
     fetchRegistry();
@@ -113,8 +115,58 @@ export default function RegistryPage() {
           data={registryItems}
           columns={columns}
           searchKeys={['name', 'description']}
+          onRowClick={(row) => setSelectedItem(row)}
         />
       )}
+
+      <DetailDrawer
+        isOpen={selectedItem !== null}
+        onClose={() => setSelectedItem(null)}
+        title="Registry Record"
+        subtitle={selectedItem?.itemType}
+        actions={
+          <>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+              <Download size={16} /> Export JSON
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+              <Tag size={16} /> Edit Tags
+            </button>
+            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors">
+              <FileText size={16} /> View Full Record
+            </button>
+          </>
+        }
+      >
+        {selectedItem && (
+          <div className="space-y-6">
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Name</h4>
+              <p className="text-foreground text-lg">{selectedItem.name}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Description</h4>
+              <p className="text-foreground">{selectedItem.description}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Tags</h4>
+              <div className="flex gap-2 flex-wrap">
+                {selectedItem.tags?.map((t: string) => (
+                  <span key={t} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">{t}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-secondary mb-2">Metadata Map</h4>
+              <div className="bg-gray-50 border border-gray-100 rounded p-4 overflow-x-auto">
+                <pre className="text-xs font-mono text-gray-700">
+                  {JSON.stringify(selectedItem.metadata, null, 2)}
+                </pre>
+              </div>
+            </div>
+          </div>
+        )}
+      </DetailDrawer>
     </div>
   );
 }
