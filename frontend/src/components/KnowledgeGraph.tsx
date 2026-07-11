@@ -25,14 +25,31 @@ export default function KnowledgeGraph() {
     });
   }, [setGraphData]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 400 });
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        setDimensions({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height || 400
+        });
+      }
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="w-full h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-700">
-      <div className="p-4 border-b border-gray-700 bg-gray-800/50">
+    <div className="w-full h-full bg-gray-900 rounded-xl overflow-hidden border border-gray-700 flex flex-col">
+      <div className="p-4 border-b border-gray-700 bg-gray-800/50 shrink-0">
         <h3 className="font-semibold text-gray-200">Knowledge Graph Viewer</h3>
         <p className="text-xs text-gray-400">Extracted relationships from uploaded documents.</p>
       </div>
-      <div className="h-[400px]">
-        {graphData.nodes.length > 0 && (
+      <div ref={containerRef} className="flex-1 min-h-[300px] w-full">
+        {graphData.nodes.length > 0 && dimensions.width > 0 && (
           <ForceGraph2D
             ref={fgRef}
             graphData={graphData}
@@ -45,8 +62,8 @@ export default function KnowledgeGraph() {
             linkColor={() => '#4b5563'}
             linkDirectionalArrowLength={3.5}
             linkDirectionalArrowRelPos={1}
-            width={800}
-            height={400}
+            width={dimensions.width}
+            height={dimensions.height}
             backgroundColor="#111827"
           />
         )}

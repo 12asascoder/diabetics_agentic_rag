@@ -37,7 +37,7 @@ export default function LandingPage() {
         }}
       />
 
-      <header className="px-8 py-5 flex justify-between items-center z-10 bg-neutral/80 backdrop-blur-sm border-b border-gray-200">
+      <header className="px-4 md:px-8 py-4 md:py-5 flex justify-between items-center z-10 bg-neutral/80 backdrop-blur-sm border-b border-gray-200">
         <div className="flex items-center gap-2 font-heading font-bold text-lg text-primary">
           <FlaskConical size={20} className="text-primary" />
           <span>DiaResearch IQ</span>
@@ -48,9 +48,9 @@ export default function LandingPage() {
           <button onClick={() => setActiveModal('resources')} className="hover:text-primary transition-colors focus:outline-none">Resources</button>
           <button onClick={() => setActiveModal('company')} className="hover:text-primary transition-colors focus:outline-none">Company</button>
         </nav>
-        <div className="flex items-center gap-6 text-sm font-bold">
-          <Link href="/login" className="text-primary hover:underline">Log In</Link>
-          <Link href="/login" className="bg-primary text-white px-5 py-2.5 rounded hover:bg-primary/90 transition-colors">
+        <div className="flex items-center gap-3 md:gap-6 text-sm font-bold">
+          <Link href="/login" className="text-primary hover:underline hidden sm:block">Log In</Link>
+          <Link href="/login" className="bg-primary text-white px-4 md:px-5 py-2 md:py-2.5 rounded hover:bg-primary/90 transition-colors">
             Demo
           </Link>
         </div>
@@ -62,7 +62,7 @@ export default function LandingPage() {
           New available: Advanced Trial Matching Analytics v2.0
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-heading font-bold text-primary max-w-3xl text-center leading-[1.1] tracking-tight mb-6">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-primary max-w-3xl text-center leading-[1.1] tracking-tight mb-6">
           Empowering Diabetes Research with Clinical Intelligence.
         </h1>
 
@@ -70,11 +70,11 @@ export default function LandingPage() {
           Accelerate breakthrough discoveries with our unified platform for clinical data analysis, protocol management, and global registry integration.
         </p>
 
-        <div className="flex gap-4 mb-20">
-          <Link href="/login" className="bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm">
+        <div className="flex flex-col sm:flex-row gap-4 mb-12 md:mb-20 w-full sm:w-auto">
+          <Link href="/login" className="w-full sm:w-auto text-center bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm min-h-[44px]">
             Start Researching
           </Link>
-          <button className="bg-white text-primary border border-gray-200 px-8 py-3.5 rounded font-medium hover:bg-gray-50 transition-colors shadow-sm">
+          <button className="w-full sm:w-auto bg-white text-primary border border-gray-200 px-8 py-3.5 rounded font-medium hover:bg-gray-50 transition-colors shadow-sm min-h-[44px]">
             Explore Methodology
           </button>
         </div>
@@ -84,7 +84,7 @@ export default function LandingPage() {
           {/* Decorative glows behind the mockup */}
           <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-primary rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition duration-1000"></div>
 
-          <div className="relative bg-white/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 overflow-hidden flex flex-col h-[500px]">
+          <div className="relative bg-white/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 overflow-hidden flex flex-col h-[350px] md:h-[500px]">
             {/* Window Controls */}
             <div className="h-10 border-b border-gray-100 bg-gray-50/50 flex items-center px-4 gap-2 shrink-0">
               <div className="w-3 h-3 rounded-full bg-red-400 shadow-sm"></div>
@@ -96,7 +96,7 @@ export default function LandingPage() {
             {/* Mockup Body */}
             <div className="flex-1 flex bg-neutral/30">
               {/* Sidebar */}
-              <div className="w-48 border-r border-gray-100 bg-white/50 p-4 space-y-4">
+              <div className="hidden md:block w-48 border-r border-gray-100 bg-white/50 p-4 space-y-4 shrink-0">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="w-6 h-6 rounded bg-primary/20 flex items-center justify-center"><FlaskConical size={12} className="text-primary" /></div>
                   <div className="h-4 w-20 bg-gray-200 rounded"></div>
@@ -108,7 +108,7 @@ export default function LandingPage() {
               </div>
 
               {/* Main content */}
-              <div className="flex-1 p-6 flex flex-col gap-6">
+              <div className="flex-1 p-4 md:p-6 flex flex-col gap-4 md:gap-6 overflow-hidden">
                 <div className="flex justify-between items-center shrink-0">
                   <div className="space-y-2">
                     <div className="h-6 w-48 bg-gray-800 rounded"></div>
@@ -120,7 +120,7 @@ export default function LandingPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 shrink-0">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 shrink-0">
                   {[
                     { label: 'Active Trials', val: '24', trend: 'bg-green-100 w-12' },
                     { label: 'Registry Patients', val: '14,291', trend: 'bg-green-100 w-16' },
@@ -167,7 +167,7 @@ export default function LandingPage() {
 
         <div className="text-center w-full">
           <p className="text-xs font-label tracking-widest text-gray-400 uppercase mb-8">Trusted by leading research institutions</p>
-          <div className="flex flex-wrap justify-center gap-12 text-secondary font-heading font-semibold text-lg opacity-80">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-12 text-secondary font-heading font-semibold text-base md:text-lg opacity-80">
             <span>Joslin Diabetes Center</span>
             <span>Mayo Clinic</span>
             <span>Johns Hopkins Medicine</span>
@@ -188,8 +188,8 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
             {/* Card 1 */}
-            <div className="md:col-span-2 bg-[#F1F5F9] rounded-xl p-8 border border-gray-200 relative overflow-hidden flex">
-              <div className="z-10 flex-1 pr-8">
+            <div className="md:col-span-2 bg-[#F1F5F9] rounded-xl p-6 md:p-8 border border-gray-200 relative overflow-hidden flex flex-col md:flex-row">
+              <div className="z-10 flex-1 md:pr-8">
                 <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded flex items-center justify-center mb-6">
                   <Activity size={20} />
                 </div>
@@ -232,7 +232,7 @@ export default function LandingPage() {
             </div>
 
             {/* Card 4 (Dark) */}
-            <div className="md:col-span-2 bg-primary text-white rounded-xl p-8 overflow-hidden relative flex">
+            <div className="md:col-span-2 bg-primary text-white rounded-xl p-6 md:p-8 overflow-hidden relative flex flex-col md:flex-row">
               <div className="z-10 flex-1 relative z-20">
                 <div className="w-10 h-10 bg-white/10 text-white rounded flex items-center justify-center mb-6 backdrop-blur-md border border-white/20">
                   <LineChart size={20} />

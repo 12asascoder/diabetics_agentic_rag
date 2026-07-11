@@ -60,7 +60,7 @@ export default function AuthPage() {
         <p className="text-secondary text-sm">Clinical Intelligence Platform</p>
       </div>
 
-      <div className="bg-white border border-gray-200 shadow-sm rounded-xl w-full max-w-md p-8">
+      <div className="bg-white border border-gray-200 rounded-xl shadow-xl w-full max-w-md p-6 sm:p-8 relative z-10 overflow-hidden">
         <h2 className="text-xl font-heading font-bold text-primary mb-6">
           {isLogin ? 'Welcome Back' : 'Create an Account'}
         </h2>

@@ -76,8 +76,8 @@ export function DataTable<T>({
   return (
     <div className="w-full bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col font-sans">
       {searchable && (
-        <div className="p-4 border-b border-gray-100 flex items-center justify-between">
-          <div className="relative w-72">
+        <div className="p-4 border-b border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-0">
+          <div className="relative w-full sm:w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
             <input
               type="text"
@@ -144,8 +144,8 @@ export function DataTable<T>({
 
       {/* Pagination Footer */}
       {totalPages > 1 && (
-        <div className="p-4 border-t border-gray-100 flex items-center justify-between text-sm text-secondary bg-gray-50">
-          <div>
+        <div className="p-4 border-t border-gray-100 flex flex-col sm:flex-row gap-4 sm:gap-0 items-center justify-between text-sm text-secondary bg-gray-50">
+          <div className="text-center sm:text-left">
             Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, sortedData.length)} of {sortedData.length} entries
           </div>
           <div className="flex items-center gap-2">

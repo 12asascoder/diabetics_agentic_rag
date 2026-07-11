@@ -51,8 +51,8 @@ export function NewAnalysisModal({ isOpen, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden animate-slide-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm animate-fade-in p-4 sm:p-0">
+      <div className="bg-white w-full max-w-lg rounded-xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-slide-up">
         {/* Header */}
         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
           <h2 className="text-lg font-bold font-heading text-primary flex items-center gap-2">
@@ -70,7 +70,8 @@ export function NewAnalysisModal({ isOpen, onClose }: Props) {
         </div>
 
         {/* Body */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <div className="overflow-y-auto overflow-x-hidden flex-1">
+          <form id="new-analysis-form" onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-5">
           <div>
             <label className="block text-sm font-label text-secondary mb-1">Analysis Title</label>
             <input 
@@ -95,7 +96,7 @@ export function NewAnalysisModal({ isOpen, onClose }: Props) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-label text-secondary mb-1">Disease Category</label>
               <select 
@@ -121,24 +122,29 @@ export function NewAnalysisModal({ isOpen, onClose }: Props) {
             </div>
           </div>
 
-          <div className="pt-4 flex justify-end gap-3">
-            <button 
-              type="button" 
-              onClick={onClose}
-              className="px-4 py-2 text-sm font-medium text-secondary hover:text-primary transition-colors focus:outline-none"
-            >
-              Cancel
-            </button>
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="px-6 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2 focus:outline-none"
-            >
-              {loading && <Loader2 size={16} className="animate-spin" />}
-              {loading ? 'Creating...' : 'Launch Workspace'}
-            </button>
           </div>
         </form>
+        </div>
+        
+        {/* Footer */}
+        <div className="p-4 sm:p-6 border-t border-gray-100 bg-gray-50 flex justify-end gap-3 shrink-0">
+          <button 
+            type="button" 
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-secondary hover:text-primary transition-colors focus:outline-none min-h-[44px]"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            form="new-analysis-form"
+            disabled={loading}
+            className="px-6 py-2 bg-primary text-white rounded-md text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2 focus:outline-none min-h-[44px]"
+          >
+            {loading && <Loader2 size={16} className="animate-spin" />}
+            {loading ? 'Creating...' : 'Launch Workspace'}
+          </button>
+        </div>
       </div>
     </div>
   );
