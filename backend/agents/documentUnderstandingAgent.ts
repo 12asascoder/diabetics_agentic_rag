@@ -1,38 +1,52 @@
 import crypto from 'crypto';
+import { logger } from '../config/logger';
 
-export interface ChunkMetadata {
-  title: string;
-  source: string;
-  page_start: number;
-  page_end: number;
+export interface DocumentChunk {
   chunk_id: string;
+  level: 'document' | 'section' | 'paragraph' | 'sentence' | 'table';
+  content: string;
+  metadata: Record<string, any>;
+  parent_id?: string;
+  children_ids: string[];
 }
 
-export interface DocumentNode {
-  title: string;
-  summary: string;
-  page_start: number;
-  page_end: number;
-  content: string;
-  references: string[];
-  chunk_id: string;
-  metadata: Record<string, any>;
+export interface DocumentProcessingResult {
+  metadata: {
+    title?: string;
+    doi?: string;
+    authors?: string[];
+    publicationDate?: string;
+    studyType?: string;
+  };
+  chunks: DocumentChunk[];
 }
 
 /**
- * Intelligent semantic segmentation pipeline.
- * Preserves headings, tables, lists, and context.
+ * Intelligent Multi-Level Semantic Segmentation Pipeline
+ * Replaces flat chunking with a hierarchical tree (Document -> Section -> Paragraph -> Sentence).
  */
-export const processDocument = async (text: string, filename: string): Promise<{ nodes: DocumentNode[] }> => {
-  console.log(`[Document Engine] Starting semantic segmentation for: ${filename}`);
+export const processDocumentHierarchical = async (text: string, filename: string): Promise<DocumentProcessingResult> => {
+  logger.info(`[Document Engine] Starting hierarchical semantic segmentation for: ${filename}`);
   
-  // 1. Normalize text and preserve structural boundaries
+  // 1. Normalize Text
   const normalizedText = text.replace(/\r\n/g, '\n');
   
-  // 2. Split by semantic boundaries (Headings)
-  // Assuming a rough markdown/text structure where headings might look like "\n# Heading" or "\nHeading\n======="
-  const sectionRegex = /(?:\n|^)(#{1,6}\s+.*|\n[A-Z][\w\s]+\n[=-]+)(?=\n|$)/g;
+  // 2. Extract Metadata (Heuristics for DOI, Authors, Dates)
+  const metadata = extractMetadata(normalizedText, filename);
+
+  const chunks: DocumentChunk[] = [];
+  const rootId = generateChunkId('doc', filename);
   
+  const rootChunk: DocumentChunk = {
+    chunk_id: rootId,
+    level: 'document',
+    content: metadata.title || filename,
+    metadata: { ...metadata, source: filename },
+    children_ids: []
+  };
+
+  // 3. Split by Sections (Headings)
+  const sectionRegex = /(?:\n|^)(#{1,6}\s+.*|\n[A-Z][\w\s]+\n[=-]+)(?=\n|$)/g;
   let match;
   let lastIndex = 0;
   const rawSections: { heading: string, content: string }[] = [];
@@ -50,69 +64,83 @@ export const processDocument = async (text: string, filename: string): Promise<{
   }
   
   if (lastIndex < normalizedText.length) {
-    if (rawSections.length === 0) {
-      rawSections.push({ heading: 'General', content: normalizedText.trim() });
-    } else {
-      rawSections[rawSections.length - 1].content += '\n' + normalizedText.substring(lastIndex).trim();
-    }
+    rawSections.push({
+      heading: rawSections.length === 0 ? 'General' : rawSections[rawSections.length - 1].heading,
+      content: normalizedText.substring(lastIndex).trim()
+    });
   }
 
-  // 3. Chunking with overlap and preservation of tables/lists
-  const nodes: DocumentNode[] = [];
-  const MAX_CHUNK_SIZE = 1000; // characters
-  const OVERLAP_SIZE = 200;
-  
+  // 4. Build Hierarchy
   for (const section of rawSections) {
     if (!section.content) continue;
     
-    // Check if the section contains tables or lists, we try not to split them.
-    // A simple heuristic is to keep the section intact if it's smaller than a threshold,
-    // otherwise split logically by paragraphs.
-    const paragraphs = section.content.split(/\n\s*\n/);
-    let currentChunk = '';
+    const sectionId = generateChunkId('sec', section.heading + section.content.substring(0, 50));
+    rootChunk.children_ids.push(sectionId);
     
-    for (let i = 0; i < paragraphs.length; i++) {
-      const p = paragraphs[i];
-      if (currentChunk.length + p.length > MAX_CHUNK_SIZE && currentChunk.length > 0) {
-        // Push current chunk
-        nodes.push(createNode(section.heading, currentChunk, filename));
-        // Start new chunk with overlap (take the last paragraph from previous chunk if it fits)
-        currentChunk = (paragraphs[i - 1]?.length < OVERLAP_SIZE ? paragraphs[i - 1] + '\n\n' : '') + p;
-      } else {
-        currentChunk += (currentChunk ? '\n\n' : '') + p;
+    const sectionChunk: DocumentChunk = {
+      chunk_id: sectionId,
+      level: 'section',
+      content: section.heading,
+      parent_id: rootId,
+      metadata: { heading: section.heading, source: filename },
+      children_ids: []
+    };
+
+    // Split paragraphs
+    const paragraphs = section.content.split(/\n\s*\n/);
+    for (const p of paragraphs) {
+      if (p.trim().length < 10) continue;
+      
+      const paraId = generateChunkId('par', p);
+      sectionChunk.children_ids.push(paraId);
+      
+      const paraChunk: DocumentChunk = {
+        chunk_id: paraId,
+        level: 'paragraph',
+        content: p.trim(),
+        parent_id: sectionId,
+        metadata: { heading: section.heading, source: filename },
+        children_ids: []
+      };
+
+      // Split sentences
+      const sentences = p.match(/[^.!?]+[.!?]+/g) || [p];
+      for (const s of sentences) {
+        if (s.trim().length < 5) continue;
+        const sentId = generateChunkId('sen', s);
+        paraChunk.children_ids.push(sentId);
+        
+        chunks.push({
+          chunk_id: sentId,
+          level: 'sentence',
+          content: s.trim(),
+          parent_id: paraId,
+          metadata: { source: filename },
+          children_ids: []
+        });
       }
+      chunks.push(paraChunk);
     }
-    if (currentChunk) {
-      nodes.push(createNode(section.heading, currentChunk, filename));
-    }
+    chunks.push(sectionChunk);
   }
 
-  // 4. Eliminate duplicate segments
-  const uniqueNodes = deduplicateNodes(nodes);
-
-  console.log(`[Document Engine] Generated ${uniqueNodes.length} unique semantic chunks.`);
-  return { nodes: uniqueNodes };
+  chunks.push(rootChunk);
+  logger.info(`[Document Engine] Generated ${chunks.length} hierarchical chunks.`);
+  return { metadata, chunks };
 };
 
-const createNode = (title: string, content: string, source: string): DocumentNode => {
-  const hash = crypto.createHash('sha256').update(content).digest('hex');
+const extractMetadata = (text: string, filename: string) => {
+  const doiMatch = text.match(/\b(10\.\d{4,9}\/[-._;()/:A-Z0-9]+)\b/i);
+  const yearMatch = text.match(/\b(19|20)\d{2}\b/);
+  
   return {
-    title,
-    summary: content.substring(0, 100) + '...',
-    page_start: 1, // Simulated page number extraction
-    page_end: 1,
-    content,
-    references: [],
-    chunk_id: `chunk_${hash.substring(0, 8)}`,
-    metadata: { source, extracted_at: new Date().toISOString() }
+    title: filename.replace(/\.(pdf|docx|txt|csv)$/i, ''),
+    doi: doiMatch ? doiMatch[1] : undefined,
+    publicationDate: yearMatch ? yearMatch[0] : undefined,
   };
 };
 
-const deduplicateNodes = (nodes: DocumentNode[]): DocumentNode[] => {
-  const seen = new Set<string>();
-  return nodes.filter(node => {
-    if (seen.has(node.chunk_id)) return false;
-    seen.add(node.chunk_id);
-    return true;
-  });
+const generateChunkId = (prefix: string, content: string): string => {
+  const hash = crypto.createHash('sha256').update(content).digest('hex').substring(0, 8);
+  return `${prefix}_${hash}`;
 };

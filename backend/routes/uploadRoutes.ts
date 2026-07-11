@@ -28,13 +28,31 @@ const upload = multer({
   }
 });
 
-router.post('/', upload.single('document'), (req, res) => {
+import { documentQueue } from '../config/queue';
+import { logger } from '../config/logger';
+
+router.post('/', upload.single('document'), async (req, res) => {
   try {
     if (!req.file) {
       res.status(400).json({ message: 'No file uploaded' });
       return;
     }
-    res.status(200).json({ message: 'File uploaded securely', file: req.file.filename });
+
+    // Enqueue document processing job
+    const job = await documentQueue.add('process-document', {
+      filename: req.file.originalname,
+      filePath: req.file.path,
+      mimetype: req.file.mimetype,
+      workspaceId: req.body.workspaceId || null
+    });
+
+    logger.info(`[Upload Route] Enqueued job ${job.id} for ${req.file.originalname}`);
+
+    res.status(200).json({ 
+      message: 'File uploaded and queued for processing successfully', 
+      file: req.file.filename,
+      jobId: job.id
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

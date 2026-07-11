@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx watch index.ts"
   },
   "keywords": [],
   "author": "",
@@ -13,17 +14,21 @@
   "dependencies": {
     "@google/genai": "^2.11.0",
     "bcrypt": "^6.0.0",
+    "bullmq": "^5.80.1",
     "chromadb": "^3.5.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "csv-parse": "^7.0.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "ioredis": "^5.11.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
     "multer": "^2.2.0",
     "pdf-parse": "^2.4.5",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.1",
+    "winston": "^3.19.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -31,6 +36,7 @@
     "@types/cors": "^2.8.19",
     "@types/csv-parse": "^1.1.12",
     "@types/express": "^5.0.6",
+    "@types/ioredis": "^4.28.10",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.2.0",
     "@types/node": "^26.1.1",
@@ -38,6 +44,7 @@
     "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
+    "tsx": "^4.23.0",
     "typescript": "^7.0.2"
   }
 }
