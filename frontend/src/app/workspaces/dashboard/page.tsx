@@ -18,7 +18,11 @@ import {
   TrendingUp
 } from 'lucide-react';
 
+import { useStore } from '@/lib/store';
+
 export default function WorkspaceDashboard() {
+  const { setUploadModalOpen } = useStore();
+
   return (
     <div className="w-full h-full max-w-7xl mx-auto flex flex-col font-sans">
       
@@ -29,11 +33,17 @@ export default function WorkspaceDashboard() {
           <p className="text-secondary text-sm">Monitor your active research, evidence synthesis, and recent updates.</p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-primary rounded font-medium text-sm hover:bg-gray-50 transition-colors shadow-sm">
+          <button 
+            onClick={() => setUploadModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-primary rounded font-medium text-sm hover:bg-gray-50 transition-colors shadow-sm"
+          >
             <FileUp size={16} />
             Upload Study
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary border border-primary text-white rounded font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm">
+          <button 
+            onClick={() => alert("Generate Report is coming soon! This will compile a full PDF summary of your findings.")}
+            className="flex items-center gap-2 px-4 py-2 bg-primary border border-primary text-white rounded font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm"
+          >
             <FileText size={16} />
             Generate Report
           </button>

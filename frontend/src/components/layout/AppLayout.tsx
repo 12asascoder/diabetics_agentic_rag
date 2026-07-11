@@ -36,8 +36,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isNewAnalysisOpen, setIsNewAnalysisOpen] = useState(false);
-  const { user, clearUser } = useStore();
+  const { user, isUploadModalOpen, setUploadModalOpen } = useStore();
 
   const navItems = [
     { label: 'Workspace', href: '/workspaces/dashboard', icon: LayoutDashboard },
@@ -81,10 +80,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
           </button>
         </div>
 
-        <div className="px-4 mb-6">
+        <div className="p-4 border-b border-gray-100 flex items-center justify-between shrink-0 mb-4 h-20">
           <button 
-            onClick={() => setIsNewAnalysisOpen(true)}
-            className="w-full bg-primary text-white flex items-center justify-center gap-2 py-2.5 rounded font-medium text-sm hover:bg-primary/90 transition-colors focus:outline-none min-h-[44px]"
+            onClick={() => setUploadModalOpen(true)}
+            className="w-full flex items-center justify-center gap-2 bg-primary text-white py-2.5 rounded shadow-sm hover:bg-primary/90 transition-colors font-medium text-sm"
           >
             <Plus size={16} />
             New Analysis
@@ -196,7 +195,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
             </div>
 
             <div className="hidden lg:flex items-center gap-4 ml-6">
-              <button className="bg-primary text-white px-4 py-2 rounded font-medium text-sm hover:bg-primary/90 transition-colors min-h-[40px]">
+              <button 
+                onClick={() => alert("Export Data is coming soon! This will allow you to export findings to CSV/PDF.")}
+                className="bg-primary text-white px-4 py-2 rounded font-medium text-sm hover:bg-primary/90 transition-colors min-h-[40px]"
+              >
                 Export Data
               </button>
               
@@ -245,8 +247,8 @@ export default function AppLayout({ children }: AppLayoutProps) {
       </div>
 
       <NewAnalysisModal 
-        isOpen={isNewAnalysisOpen} 
-        onClose={() => setIsNewAnalysisOpen(false)} 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setUploadModalOpen(false)} 
       />
     </div>
   );

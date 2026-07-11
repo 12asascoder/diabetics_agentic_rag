@@ -11,11 +11,21 @@ const documentUnderstandingAgent_1 = require("../agents/documentUnderstandingAge
 const knowledgeGraphAgent_1 = require("../agents/knowledgeGraphAgent");
 const chroma_1 = require("../database/chroma");
 const fs_1 = __importDefault(require("fs"));
-exports.connection = {
+const ioredis_1 = __importDefault(require("ioredis"));
+exports.connection = new ioredis_1.default({
     host: env_1.env.REDIS_HOST || '127.0.0.1',
     port: env_1.env.REDIS_PORT ? parseInt(env_1.env.REDIS_PORT) : 6379,
-    ...(env_1.env.REDIS_PASSWORD && { password: env_1.env.REDIS_PASSWORD })
-};
+    ...(env_1.env.REDIS_PASSWORD && { password: env_1.env.REDIS_PASSWORD }),
+    maxRetriesPerRequest: null,
+});
+exports.connection.on('error', (err) => {
+    if (err.code === 'ECONNREFUSED') {
+        logger_1.logger.error('🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.');
+    }
+    else {
+        logger_1.logger.error(`🚨 Redis error: ${err.message}`);
+    }
+});
 exports.documentQueue = new bullmq_1.Queue('document-processing', { connection: exports.connection });
 // Define the worker that will process document chunks
 exports.documentWorker = new bullmq_1.Worker('document-processing', async (job) => {

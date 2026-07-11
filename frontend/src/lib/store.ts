@@ -51,6 +51,10 @@ interface AppState {
   // Agent State
   agentStep: 'planning' | 'retrieval' | 'analysis' | 'drafting' | 'completed' | 'error' | 'idle';
   setAgentStep: (step: AppState['agentStep']) => void;
+
+  // UI State
+  isUploadModalOpen: boolean;
+  setUploadModalOpen: (isOpen: boolean) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -80,5 +84,9 @@ export const useStore = create<AppState>((set) => ({
   setRegistryItems: (items) => set({ registryItems: items }),
 
   agentStep: 'idle',
-  setAgentStep: (step) => set({ agentStep: step })
+  setAgentStep: (step) => set({ agentStep: step }),
+
+  // UI State
+  isUploadModalOpen: false,
+  setUploadModalOpen: (isOpen) => set({ isUploadModalOpen: isOpen })
 }));

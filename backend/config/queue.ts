@@ -8,12 +8,14 @@ import fs from 'fs';
 
 import Redis from 'ioredis';
 
-export const connection = new Redis({
-  host: env.REDIS_HOST || '127.0.0.1',
-  port: env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379,
-  ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD }),
-  maxRetriesPerRequest: null,
-});
+export const connection = process.env.REDIS_URL 
+  ? new Redis(process.env.REDIS_URL, { maxRetriesPerRequest: null })
+  : new Redis({
+      host: env.REDIS_HOST || '127.0.0.1',
+      port: env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379,
+      ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD }),
+      maxRetriesPerRequest: null,
+    });
 
 connection.on('error', (err: any) => {
   if (err.code === 'ECONNREFUSED') {

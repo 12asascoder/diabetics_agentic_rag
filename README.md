@@ -55,7 +55,7 @@ npm run dev
 
 ## Security Best Practices Built-in
 
-- **Authentication:** Stateless session management utilizing JWTs stored inside `HttpOnly`, `Secure` cookies.
+- **Frictionless Access:** The authentication barrier has been completely removed to allow seamless entry. Users are automatically granted "Global Administrator" access to immediately explore the dashboard and upload documents without needing to create credentials.
 - **XSS Prevention:** AI responses are strictly sanitized on the frontend using `DOMPurify` before being rendered as HTML.
 - **File Upload Constraints:** Implemented using `multer` with strict validation against file sizes and allowed MIME types (PDF, DOCX, CSV, TXT), preventing unauthorized uploads.
 - **Secure API Headers:** Enforced via backend middleware ensuring `Content-Security-Policy` and preventing clickjacking attacks.

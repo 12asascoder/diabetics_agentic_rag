@@ -52,8 +52,16 @@ import { logger } from './config/logger';
 
 // Catch Uncaught Exceptions immediately
 process.on('uncaughtException', (err) => {
-  logger.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  logger.error(err.name, err.message, err.stack);
+  logger.error('UNCAUGHT EXCEPTION! 💥');
+  if (err) {
+    logger.error(err.name, err.message, err.stack);
+  }
+  
+  if (err?.message?.includes('ECONNREFUSED') || err?.message?.includes('Redis')) {
+    logger.warn('Redis connection failed, but keeping server alive.');
+    return;
+  }
+  
   process.exit(1);
 });
 
@@ -95,8 +103,18 @@ const server = app.listen(PORT, () => {
 
 // Catch Unhandled Promise Rejections
 process.on('unhandledRejection', (err: any) => {
-  logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
-  logger.error(err.name, err.message, err.stack);
+  logger.error('UNHANDLED REJECTION! 💥');
+  if (err) {
+    logger.error(err.name, err.message, err.stack);
+  }
+  
+  // If it's a Redis connection error, don't crash the server.
+  if (err?.message?.includes('ECONNREFUSED') || err?.message?.includes('Redis')) {
+    logger.warn('Redis connection failed, but keeping server alive.');
+    return;
+  }
+
+  // For other critical errors, shut down gracefully
   server.close(() => {
     process.exit(1);
   });
