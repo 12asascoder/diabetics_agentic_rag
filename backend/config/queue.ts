@@ -9,6 +9,7 @@ import fs from 'fs';
 export const connection = {
   host: env.REDIS_HOST || '127.0.0.1',
   port: env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379,
+  ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD })
 };
 
 export const documentQueue = new Queue('document-processing', { connection });
