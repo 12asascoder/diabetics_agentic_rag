@@ -6,13 +6,24 @@ import { extractKnowledgeGraph } from '../agents/knowledgeGraphAgent';
 import { addDocumentsToVectorStore } from '../database/chroma';
 import fs from 'fs';
 
-export const connection = {
+import Redis from 'ioredis';
+
+export const connection = new Redis({
   host: env.REDIS_HOST || '127.0.0.1',
   port: env.REDIS_PORT ? parseInt(env.REDIS_PORT) : 6379,
-  ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD })
-};
+  ...(env.REDIS_PASSWORD && { password: env.REDIS_PASSWORD }),
+  maxRetriesPerRequest: null,
+});
 
-export const documentQueue = new Queue('document-processing', { connection });
+connection.on('error', (err: any) => {
+  if (err.code === 'ECONNREFUSED') {
+    logger.error('🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.');
+  } else {
+    logger.error(`🚨 Redis error: ${err.message}`);
+  }
+});
+
+export const documentQueue = new Queue('document-processing', { connection: connection as any });
 
 // Define the worker that will process document chunks
 export const documentWorker = new Worker('document-processing', async (job: Job) => {
@@ -53,7 +64,7 @@ export const documentWorker = new Worker('document-processing', async (job: Job)
     logger.error(`[Worker] Error processing job ${job.id}: ${error.message}`);
     throw error;
   }
-}, { connection });
+}, { connection: connection as any });
 
 documentWorker.on('completed', (job) => {
   logger.info(`[Worker] Job ${job.id} has completed!`);
