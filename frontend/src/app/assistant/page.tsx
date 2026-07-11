@@ -6,8 +6,20 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { ArrowLeft, Send, Bot, User, BookOpen } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
+interface Citation {
+  document: string;
+  section: string;
+  page: number;
+}
+
+interface Message {
+  role: string;
+  content: string;
+  citations: Citation[];
+}
+
 export default function AIResearchAssistant() {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
       content: 'Hello, researcher. I am ready to query your knowledge base. Ask me to summarize guidelines, compare studies, or find evidence.',
