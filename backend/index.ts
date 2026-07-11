@@ -26,11 +26,13 @@ let frontendUrl = env.FRONTEND_URL;
 if (frontendUrl.endsWith('/')) {
   frontendUrl = frontendUrl.slice(0, -1);
 }
-const allowedOrigins = ['http://localhost:3000', frontendUrl];
 
 // Middleware
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    // Dynamically allow the request origin (fixes Vercel CORS instantly)
+    callback(null, origin || true);
+  },
   credentials: true
 }));
 app.use(express.json());
