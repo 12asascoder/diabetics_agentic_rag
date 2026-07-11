@@ -84,8 +84,8 @@ app.get('/', (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-const server = app.listen(PORT, () => {
-  logger.info(`🚀 Server successfully started and running on port ${PORT}`);
+const server = app.listen(PORT as number, '0.0.0.0', () => {
+  logger.info(`🚀 Server successfully started and running on http://0.0.0.0:${PORT}`);
   logger.info(`✅ Environment: ${env.NODE_ENV}`);
   logger.info(`✅ CORS Configured for frontend URL: ${frontendUrl}`);
   logger.info(`--- Registered API Routes ---`);
