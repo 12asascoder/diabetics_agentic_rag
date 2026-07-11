@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { 
   FlaskConical, 
   Plus, 
@@ -16,8 +16,12 @@ import {
   Search,
   LineChart,
   FileText,
-  MessagesSquare
+  MessagesSquare,
+  LogOut,
+  UserCircle
 } from 'lucide-react';
+import { useStore } from '@/lib/store';
+import axios from 'axios';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -25,7 +29,21 @@ interface AppLayoutProps {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState('Dashboard');
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const { user, clearUser } = useStore();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('/api/auth/logout');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      clearUser();
+      router.push('/login');
+    }
+  };
 
   const navItems = [
     { label: 'Workspace', href: '/workspaces/dashboard', icon: LayoutDashboard },
@@ -80,7 +98,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </nav>
 
         <div className="p-4 border-t border-gray-100 space-y-1">
-          <Link href="/workspaces/dashboard" className="flex items-center gap-3 px-3 py-2 text-sm text-secondary hover:text-primary hover:bg-gray-50 rounded-md transition-colors">
+          <Link href="/settings" className="flex items-center gap-3 px-3 py-2 text-sm text-secondary hover:text-primary hover:bg-gray-50 rounded-md transition-colors">
             <Settings size={18} className="text-gray-400" />
             Settings
           </Link>
@@ -135,9 +153,45 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <button className="bg-gray-50 border border-gray-200 text-secondary px-4 py-2 rounded font-medium text-sm hover:bg-gray-100 transition-colors">
               Institution Selector
             </button>
-            <button className="text-gray-400 hover:text-primary transition-colors border border-gray-200 rounded-full p-1">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors focus:outline-none"
+              >
+                {user?.name ? <span className="font-bold text-sm">{user.name.charAt(0).toUpperCase()}</span> : <UserCircle size={20} />}
+              </button>
+              
+              {isProfileOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-40" 
+                    onClick={() => setIsProfileOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-1 z-50">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-bold text-primary truncate">{user?.name || 'Guest User'}</p>
+                      <p className="text-xs text-secondary truncate mb-1">{user?.email || 'Not logged in'}</p>
+                      <p className="text-[10px] font-label text-tertiary uppercase tracking-wider">{user?.institution || ''}</p>
+                    </div>
+                    <Link 
+                      href="/settings"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-secondary hover:bg-gray-50 hover:text-primary transition-colors"
+                    >
+                      <Settings size={16} />
+                      Account Settings
+                    </Link>
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors text-left"
+                    >
+                      <LogOut size={16} />
+                      Log Out
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </header>
 

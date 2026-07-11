@@ -23,7 +23,7 @@ export default function RegistryPage() {
   const fetchRegistry = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://127.0.0.1:5005/api/registry', {
+      const res = await axios.get('/api/registry', {
         withCredentials: true
       });
       setRegistryItems(res.data);
@@ -37,7 +37,7 @@ export default function RegistryPage() {
   const handleSeedData = async () => {
     try {
       setSeeding(true);
-      await axios.post('http://127.0.0.1:5005/api/registry/seed', { workspaceId: '000000000000000000000000' }, {
+      await axios.post('http://localhost:5005/api/registry/seed', { workspaceId: '000000000000000000000000' }, {
         withCredentials: true
       });
       await fetchRegistry();

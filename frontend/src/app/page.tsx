@@ -56,9 +56,88 @@ export default function LandingPage() {
         </div>
 
         {/* Dashboard Mockup Container */}
-        <div className="w-full max-w-5xl bg-white rounded-xl shadow-xl border border-gray-200 p-2 mb-20">
-          <div className="bg-gray-50 rounded-lg h-[400px] border border-gray-100 flex items-center justify-center">
-            <span className="text-gray-400 text-sm font-label">Interactive Platform Mockup Placeholder</span>
+        <div className="w-full max-w-5xl relative mb-20 group">
+          {/* Decorative glows behind the mockup */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-primary rounded-2xl blur-lg opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+          
+          <div className="relative bg-white/90 backdrop-blur-xl rounded-xl shadow-2xl border border-white/20 overflow-hidden flex flex-col h-[500px]">
+            {/* Window Controls */}
+            <div className="h-10 border-b border-gray-100 bg-gray-50/50 flex items-center px-4 gap-2 shrink-0">
+              <div className="w-3 h-3 rounded-full bg-red-400 shadow-sm"></div>
+              <div className="w-3 h-3 rounded-full bg-amber-400 shadow-sm"></div>
+              <div className="w-3 h-3 rounded-full bg-green-400 shadow-sm"></div>
+              <div className="mx-auto text-xs font-medium text-gray-400 flex items-center gap-1"><FlaskConical size={12}/> DiaResearch IQ Dashboard</div>
+            </div>
+            
+            {/* Mockup Body */}
+            <div className="flex-1 flex bg-neutral/30">
+              {/* Sidebar */}
+              <div className="w-48 border-r border-gray-100 bg-white/50 p-4 space-y-4">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-6 h-6 rounded bg-primary/20 flex items-center justify-center"><FlaskConical size={12} className="text-primary"/></div>
+                  <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                </div>
+                <div className="h-8 w-full bg-primary/10 rounded flex items-center px-3 gap-2"><div className="w-4 h-4 bg-primary/40 rounded-sm"></div><div className="h-3 w-16 bg-primary/40 rounded"></div></div>
+                <div className="h-8 w-full bg-transparent hover:bg-gray-100 transition-colors rounded flex items-center px-3 gap-2"><div className="w-4 h-4 bg-gray-300 rounded-sm"></div><div className="h-3 w-20 bg-gray-200 rounded"></div></div>
+                <div className="h-8 w-full bg-transparent hover:bg-gray-100 transition-colors rounded flex items-center px-3 gap-2"><div className="w-4 h-4 bg-gray-300 rounded-sm"></div><div className="h-3 w-12 bg-gray-200 rounded"></div></div>
+                <div className="h-8 w-full bg-transparent hover:bg-gray-100 transition-colors rounded flex items-center px-3 gap-2"><div className="w-4 h-4 bg-gray-300 rounded-sm"></div><div className="h-3 w-24 bg-gray-200 rounded"></div></div>
+              </div>
+              
+              {/* Main content */}
+              <div className="flex-1 p-6 flex flex-col gap-6">
+                <div className="flex justify-between items-center shrink-0">
+                  <div className="space-y-2">
+                    <div className="h-6 w-48 bg-gray-800 rounded"></div>
+                    <div className="h-3 w-32 bg-gray-400 rounded"></div>
+                  </div>
+                  <div className="flex gap-3">
+                    <div className="h-9 w-24 bg-white border border-gray-200 shadow-sm rounded"></div>
+                    <div className="h-9 w-32 bg-primary text-primary-foreground shadow-sm rounded opacity-90"></div>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-4 shrink-0">
+                  {[
+                    { label: 'Active Trials', val: '24', trend: 'bg-green-100 w-12' },
+                    { label: 'Registry Patients', val: '14,291', trend: 'bg-green-100 w-16' },
+                    { label: 'Protocols Pending', val: '3', trend: 'bg-amber-100 w-10' }
+                  ].map((card, i) => (
+                    <div key={i} className="bg-white rounded-lg p-5 border border-gray-100 shadow-sm flex flex-col gap-3 relative overflow-hidden group/card hover:border-primary/30 transition-colors">
+                      <div className="absolute right-0 top-0 w-24 h-24 bg-gradient-to-bl from-blue-50 to-transparent rounded-bl-full -z-10 group-hover/card:from-blue-100 transition-colors"></div>
+                      <div className="h-3 w-24 bg-gray-400 rounded"></div>
+                      <div className="h-8 w-20 bg-gray-800 rounded"></div>
+                      <div className={`h-2 ${card.trend} rounded mt-2`}></div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="bg-white rounded-lg border border-gray-100 shadow-sm flex-1 p-5 flex flex-col relative overflow-hidden">
+                  <div className="h-4 w-40 bg-gray-800 rounded mb-8 shrink-0"></div>
+                  
+                  {/* Faint grid lines for chart */}
+                  <div className="absolute inset-x-5 top-20 bottom-5 flex flex-col justify-between pointer-events-none opacity-20">
+                    <div className="border-t border-gray-300 w-full"></div>
+                    <div className="border-t border-gray-300 w-full"></div>
+                    <div className="border-t border-gray-300 w-full"></div>
+                    <div className="border-t border-gray-300 w-full"></div>
+                  </div>
+
+                  {/* Chart bars */}
+                  <div className="flex items-end justify-between gap-2 flex-1 px-4 relative z-10">
+                    {[40, 70, 45, 90, 65, 100, 80, 55, 85, 30, 60, 75].map((h, i) => (
+                      <div key={i} className="w-10 group/bar flex flex-col items-center justify-end h-full">
+                        <div 
+                          className="w-full bg-gradient-to-t from-primary/80 to-primary/40 rounded-t-sm group-hover/bar:from-primary group-hover/bar:to-primary transition-colors cursor-pointer shadow-sm relative overflow-hidden" 
+                          style={{ height: `${h}%` }}
+                        >
+                          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/bar:translate-y-0 transition-transform duration-300"></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

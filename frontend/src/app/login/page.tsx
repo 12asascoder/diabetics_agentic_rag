@@ -30,7 +30,7 @@ export default function AuthPage() {
         ? { email, password } 
         : { name, institution, email, password };
 
-      const res = await axios.post(`http://127.0.0.1:5005${endpoint}`, payload, {
+      const res = await axios.post(endpoint, payload, {
         withCredentials: true
       });
 

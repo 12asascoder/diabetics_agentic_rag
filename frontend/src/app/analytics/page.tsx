@@ -17,7 +17,7 @@ export default function AnalyticsPage() {
       try {
         setLoading(true);
         // We'll use registry data to derive analytics
-        const res = await axios.get('http://127.0.0.1:5005/api/registry', {
+        const res = await axios.get('/api/registry', {
           withCredentials: true
         });
         setData(res.data);

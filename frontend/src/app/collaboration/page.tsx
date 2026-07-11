@@ -17,7 +17,7 @@ export default function CollaborationPage() {
     const fetchTasks = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('http://127.0.0.1:5005/api/collaboration/tasks', {
+        const res = await axios.get('/api/collaboration/tasks', {
           withCredentials: true
         });
         setTasks(res.data);
