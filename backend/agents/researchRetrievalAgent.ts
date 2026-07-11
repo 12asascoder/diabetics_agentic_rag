@@ -1,6 +1,8 @@
 import { determineRetrievalStrategy } from './routerAgent';
 import { queryKatzilla, KatzillaResult } from '../services/katzillaService';
 import { DocumentChunk } from './documentUnderstandingAgent';
+import { searchVectorStore } from '../database/chroma';
+import { logger } from '../config/logger';
 
 export interface RetrievedEvidence {
   source: string;
@@ -14,16 +16,16 @@ export interface RetrievedEvidence {
  * Improved retrieval logic combining semantic similarity (mocked via simple overlap for now),
  * keyword relevance, recency, and metadata filtering.
  */
-export const retrieveEvidence = async (query: string, documentNodes: DocumentChunk[]): Promise<RetrievedEvidence[]> => {
-  console.log(`[Retrieval Agent] Initiating retrieval for query: "${query}"`);
+export const retrieveEvidence = async (query: string, workspaceId: string): Promise<RetrievedEvidence[]> => {
+  logger.info(`[Retrieval Agent] Initiating retrieval for query: "${query}" in workspace ${workspaceId}`);
   
   const strategy = determineRetrievalStrategy(query);
-  console.log(`[Retrieval Agent] Selected Strategy: ${strategy}`);
+  logger.info(`[Retrieval Agent] Selected Strategy: ${strategy}`);
 
   let results: RetrievedEvidence[] = [];
 
   if (strategy === 'local' || strategy === 'hybrid') {
-    const localResults = retrieveLocal(query, documentNodes);
+    const localResults = await retrieveLocal(query, workspaceId);
     results = results.concat(localResults);
   }
 
@@ -43,39 +45,56 @@ export const retrieveEvidence = async (query: string, documentNodes: DocumentChu
   results = deduplicateResults(results);
   results.sort((a, b) => b.score - a.score);
 
-  console.log(`[Retrieval Agent] Retrieval complete. Found ${results.length} relevant pieces of evidence.`);
+  logger.info(`[Retrieval Agent] Retrieval complete. Found ${results.length} pieces of evidence.`);
   return results;
 };
 
-const retrieveLocal = (query: string, documentNodes: DocumentChunk[]): RetrievedEvidence[] => {
+const retrieveLocal = async (query: string, workspaceId: string): Promise<RetrievedEvidence[]> => {
   const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
   
-  return documentNodes.map(node => {
-    const contentLower = node.content.toLowerCase();
+  const chromaResults = await searchVectorStore(workspaceId, query, 10);
+  if (!chromaResults || !chromaResults.documents[0]) {
+    return [];
+  }
+
+  const results: RetrievedEvidence[] = [];
+  
+  const documents = chromaResults.documents[0];
+  const metadatas = chromaResults.metadatas[0];
+  const ids = chromaResults.ids[0];
+  const distances = chromaResults.distances ? chromaResults.distances[0] : [];
+  
+  for (let i = 0; i < documents.length; i++) {
+    const content = documents[i] as string;
+    const metadata = metadatas[i] as any;
+    const distance = distances[i] || 1;
+    
+    // Convert distance to a similarity score (assuming L2 or Cosine distance)
+    const semanticScore = Math.max(0, 1 - distance);
     
     // Keyword relevance heuristic
     let keywordMatches = 0;
+    const contentLower = content.toLowerCase();
     queryWords.forEach(word => {
       if (contentLower.includes(word)) keywordMatches++;
     });
-    
-    // Normalize score between 0 and 1
     const keywordScore = queryWords.length ? keywordMatches / queryWords.length : 0;
     
-    // In a real system, we would query ChromaDB for true semantic similarity.
-    // For now, we mix keyword score with a simulated semantic baseline.
-    const simulatedSemanticScore = 0.5 + (Math.random() * 0.2); 
+    // Hybrid scoring
+    const finalScore = (keywordScore * 0.4) + (semanticScore * 0.6);
     
-    const finalScore = (keywordScore * 0.6) + (simulatedSemanticScore * 0.4);
-
-    return {
-      source: 'Local Document',
-      content: node.content,
-      score: finalScore,
-      citation: `Document: ${node.metadata?.source || 'Unknown'} (Chunk: ${node.chunk_id})`,
-      metadata: node.metadata
-    };
-  }).filter(r => r.score > 0.4); // Threshold filtering
+    if (finalScore > 0.3) {
+      results.push({
+        source: 'Local Document',
+        content,
+        score: finalScore,
+        citation: `Document: ${metadata?.source || 'Unknown'} (Chunk ID: ${ids[i]})`,
+        metadata
+      });
+    }
+  }
+  
+  return results;
 };
 
 const deduplicateResults = (results: RetrievedEvidence[]): RetrievedEvidence[] => {

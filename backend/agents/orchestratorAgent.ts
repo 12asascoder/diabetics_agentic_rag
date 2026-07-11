@@ -33,9 +33,8 @@ export const runResearchOrchestration = async (query: string, workspaceId: strin
 
     // Step 1: Retrieval
     state.currentStep = 'retrieval';
-    // In production, we would query the actual DocumentNodes from DB
-    // For now, we pass an empty array simulating the global knowledge graph search
-    state.retrievedEvidence = await retrieveEvidence(query, []);
+    // We now query ChromaDB vector store based on workspace ID
+    state.retrievedEvidence = await retrieveEvidence(query, workspaceId);
     
     // Step 2: Quality Assessment / Analysis
     state.currentStep = 'analysis';

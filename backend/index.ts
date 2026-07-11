@@ -4,6 +4,8 @@ import cookieParser from 'cookie-parser';
 import connectDB from './database';
 import authRoutes from './routes/authRoutes';
 import uploadRoutes from './routes/uploadRoutes';
+import agentRoutes from './routes/agentRoutes';
+import workspaceRoutes from './routes/workspaceRoutes';
 import { env, validateEnv } from './config/env';
 
 // Validate environment variables on startup
@@ -35,6 +37,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/agents', agentRoutes);
+app.use('/api/workspaces', workspaceRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
