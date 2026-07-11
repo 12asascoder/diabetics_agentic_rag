@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import axios from 'axios';
+import { NewAnalysisModal } from '@/components/ui/NewAnalysisModal';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('Dashboard');
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNewAnalysisOpen, setIsNewAnalysisOpen] = useState(false);
   const { user, clearUser } = useStore();
 
   const handleLogout = async () => {
@@ -71,7 +73,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
         </div>
 
         <div className="px-4 mb-6">
-          <button className="w-full bg-primary text-white flex items-center justify-center gap-2 py-2.5 rounded font-medium text-sm hover:bg-primary/90 transition-colors">
+          <button 
+            onClick={() => setIsNewAnalysisOpen(true)}
+            className="w-full bg-primary text-white flex items-center justify-center gap-2 py-2.5 rounded font-medium text-sm hover:bg-primary/90 transition-colors focus:outline-none"
+          >
             <Plus size={16} />
             New Analysis
           </button>
@@ -113,7 +118,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
       <div className="flex-1 flex flex-col h-full overflow-hidden bg-neutral">
         
         {/* Top Header */}
-        <header className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0 z-10">
+        <header className="h-20 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0 z-50 relative">
           <h2 className="text-xl font-heading font-bold text-primary w-64 leading-tight">
             Diabetes Research<br/>Intelligence
           </h2>
@@ -210,6 +215,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
           </div>
         </main>
       </div>
+
+      <NewAnalysisModal 
+        isOpen={isNewAnalysisOpen} 
+        onClose={() => setIsNewAnalysisOpen(false)} 
+      />
     </div>
   );
 }

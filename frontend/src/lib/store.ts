@@ -29,6 +29,7 @@ interface User {
 interface AppState {
   user: User | null;
   setUser: (user: User | null) => void;
+  clearUser: () => void;
   
   currentWorkspace: Workspace | null;
   workspaces: Workspace[];
@@ -55,6 +56,7 @@ interface AppState {
 export const useStore = create<AppState>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
+  clearUser: () => set({ user: null }),
 
   currentWorkspace: null,
   workspaces: [],

@@ -6,7 +6,7 @@ import { useStore } from '@/lib/store';
 
 export default function KnowledgeGraph() {
   const { graphData, setGraphData } = useStore();
-  const fgRef = useRef();
+  const fgRef = useRef<any>(null);
 
   useEffect(() => {
     // Mock data for UI demonstration

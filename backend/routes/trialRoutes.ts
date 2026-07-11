@@ -15,12 +15,12 @@ router.get('/', protect, async (req, res) => {
     // Try to fetch live clinical trials from Katzilla
     let liveTrials: any[] = [];
     try {
-      const response = await kz.agent('health').action('clinical-trials', {
+      const response = await kz.agent('health').action('nih-clinical-trials', {
         condition: 'diabetes',
         limit: 50
       });
-      if (response && response.data) {
-        liveTrials = Array.isArray(response.data) ? response.data : [response.data];
+      if (response && response.data && response.data.studies) {
+        liveTrials = response.data.studies;
       }
     } catch (kzError: any) {
       logger.warn(`[Katzilla] Failed to fetch live trials: ${kzError.message}. Falling back to local DB.`);
@@ -32,11 +32,11 @@ router.get('/', protect, async (req, res) => {
     // Combine them, format Katzilla data to match our UI expectations if needed
     const combined = [...localTrials, ...liveTrials.map((t: any, i: number) => ({
       _id: `kz_${i}`,
-      trialId: t.nct_id || t.id || `NCT-KZ-${i}`,
-      title: t.brief_title || t.title || 'Unknown Title',
-      status: t.overall_status || t.status || 'Active',
-      sponsor: t.lead_sponsor?.agency || t.sponsor || 'Unknown Sponsor',
-      phase: t.phase || 'Phase 2',
+      trialId: t.id || `NCT-KZ-${i}`,
+      title: t.title || 'Unknown Title',
+      status: t.status || 'Active',
+      sponsor: t.lead_sponsor || 'Unknown Sponsor',
+      phase: t.phases ? t.phases.join(', ') : 'Phase 2',
       startDate: t.start_date || new Date(),
       studyPopulation: t.enrollment || 0,
       source: 'Katzilla'

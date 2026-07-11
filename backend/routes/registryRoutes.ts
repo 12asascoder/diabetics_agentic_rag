@@ -5,6 +5,9 @@ import { logger } from '../config/logger';
 import fs from 'fs';
 import path from 'path';
 import csv from 'csv-parser';
+import multer from 'multer';
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
@@ -50,6 +53,45 @@ router.post('/seed', protect, async (req, res) => {
       });
   } catch (error: any) {
     logger.error(`[API] Error seeding registry: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/upload', protect, upload.single('file'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    const results: any[] = [];
+    const stream = require('stream');
+    const bufferStream = new stream.PassThrough();
+    bufferStream.end(req.file.buffer);
+
+    bufferStream
+      .pipe(csv())
+      .on('data', (data: any) => results.push(data))
+      .on('end', async () => {
+        try {
+          const itemsToCreate = results.slice(0, 100).map((row, index) => ({
+            itemType: 'Import',
+            name: `Imported Record #${index + 1}`,
+            description: `Imported Data Record`,
+            tags: ['csv-import'],
+            metadata: row,
+            workspaceId: req.body.workspaceId || '000000000000000000000000',
+            createdBy: req.researcher._id
+          }));
+
+          await RegistryItem.insertMany(itemsToCreate);
+          res.status(201).json({ message: `Successfully imported ${itemsToCreate.length} records from CSV` });
+        } catch (dbError: any) {
+          logger.error(`[API] DB Error during CSV import: ${dbError.message}`);
+          res.status(500).json({ message: dbError.message });
+        }
+      });
+  } catch (error: any) {
+    logger.error(`[API] Error importing CSV: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 });

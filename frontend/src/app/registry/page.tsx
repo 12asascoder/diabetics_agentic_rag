@@ -6,7 +6,7 @@ import { DataTable } from '@/components/ui/DataTable';
 import { LoadingSkeleton } from '@/components/ui/LoadingSkeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { DetailDrawer } from '@/components/ui/DetailDrawer';
-import { Users, FileSpreadsheet, PlayCircle, Download, FileText, Tag } from 'lucide-react';
+import { Users, FileSpreadsheet, PlayCircle, Download, FileText, Tag, Upload } from 'lucide-react';
 import axios from 'axios';
 
 export default function RegistryPage() {
@@ -15,6 +15,9 @@ export default function RegistryPage() {
   const [error, setError] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [showFullRecord, setShowFullRecord] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetchRegistry();
@@ -45,6 +48,55 @@ export default function RegistryPage() {
       alert(`Error seeding: ${err.response?.data?.message || err.message}`);
     } finally {
       setSeeding(false);
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('workspaceId', '000000000000000000000000');
+
+    try {
+      setUploading(true);
+      await axios.post('/api/registry/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true
+      });
+      await fetchRegistry();
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    } catch (err: any) {
+      alert(`Error uploading: ${err.response?.data?.message || err.message}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleExportJSON = () => {
+    if (!selectedItem) return;
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(selectedItem, null, 2));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", `${selectedItem.name.replace(/\\s+/g, '_')}.json`);
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  const handleEditTags = async () => {
+    if (!selectedItem) return;
+    const newTagsStr = prompt("Enter tags separated by commas:", selectedItem.tags?.join(", "));
+    if (newTagsStr !== null) {
+      const newTags = newTagsStr.split(",").map(t => t.trim()).filter(Boolean);
+      try {
+        const res = await axios.put(`/api/registry/${selectedItem._id}`, { tags: newTags }, { withCredentials: true });
+        setSelectedItem(res.data);
+        await fetchRegistry();
+      } catch (err) {
+        alert("Error updating tags");
+      }
     }
   };
 
@@ -85,13 +137,28 @@ export default function RegistryPage() {
           <p className="text-secondary text-sm mt-1">Manage patients, studies, datasets, and institutional records.</p>
         </div>
         <div className="flex gap-2">
+          <input 
+            type="file" 
+            accept=".csv" 
+            ref={fileInputRef} 
+            onChange={handleFileUpload} 
+            className="hidden" 
+          />
+          <button 
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 bg-white border border-gray-200 text-secondary px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+          >
+            <Upload size={16} />
+            {uploading ? 'Importing...' : 'Import from PC'}
+          </button>
           <button 
             onClick={handleSeedData}
             disabled={seeding}
             className="flex items-center gap-2 bg-white border border-gray-200 text-secondary px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
           >
             <PlayCircle size={16} />
-            {seeding ? 'Importing CSV...' : 'Import from diabetes.csv'}
+            {seeding ? 'Importing CSV...' : 'Import diabetes.csv'}
           </button>
         </div>
       </div>
@@ -126,13 +193,13 @@ export default function RegistryPage() {
         subtitle={selectedItem?.itemType}
         actions={
           <>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+            <button onClick={handleExportJSON} className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
               <Download size={16} /> Export JSON
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
+            <button onClick={handleEditTags} className="flex items-center gap-2 px-3 py-2 text-sm text-secondary hover:bg-white rounded border border-transparent hover:border-gray-200 transition-colors">
               <Tag size={16} /> Edit Tags
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors">
+            <button onClick={() => setShowFullRecord(true)} className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors">
               <FileText size={16} /> View Full Record
             </button>
           </>
@@ -167,6 +234,26 @@ export default function RegistryPage() {
           </div>
         )}
       </DetailDrawer>
+
+      {showFullRecord && selectedItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-8 animate-fade-in">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 shrink-0">
+              <h3 className="font-bold text-lg text-primary flex items-center gap-2">
+                <FileText size={20} />
+                Full Record: {selectedItem.name}
+              </h3>
+              <button onClick={() => setShowFullRecord(false)} className="text-gray-400 hover:text-gray-700">✕</button>
+            </div>
+            <div className="p-6 overflow-y-auto flex-1 bg-gray-900 text-gray-100 font-mono text-sm">
+              <pre>{JSON.stringify(selectedItem, null, 2)}</pre>
+            </div>
+            <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end shrink-0">
+              <button onClick={() => setShowFullRecord(false)} className="px-6 py-2 bg-primary text-white rounded font-medium text-sm">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
