@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Researcher from '../models/Researcher';
 import { env } from '../config/env';
+import { asyncHandler } from '../middleware/asyncHandler';
+import { logger } from '../config/logger';
 
 const generateToken = (id: string) => {
   return jwt.sign({ id }, env.JWT_SECRET_KEY, {
@@ -10,86 +12,87 @@ const generateToken = (id: string) => {
   });
 };
 
-export const registerResearcher = async (req: Request, res: Response): Promise<void> => {
+export const registerResearcher = asyncHandler(async (req: Request, res: Response) => {
   const { name, institution, email, password } = req.body;
+  logger.info(`[Auth] Attempting registration for email: ${email}`);
 
-  try {
-    const researcherExists = await Researcher.findOne({ email });
+  const researcherExists = await Researcher.findOne({ email });
 
-    if (researcherExists) {
-      res.status(400).json({ message: 'Researcher already exists' });
-      return;
-    }
+  if (researcherExists) {
+    logger.warn(`[Auth] Registration failed - Email already exists: ${email}`);
+    res.status(409); // Conflict
+    throw new Error('Researcher already exists');
+  }
 
-    if (!password || password.length < 8) {
-       res.status(400).json({ message: 'Password must be at least 8 characters long' });
-       return;
-    }
+  if (!password || password.length < 8) {
+    logger.warn(`[Auth] Registration failed - Weak password for: ${email}`);
+    res.status(422); // Unprocessable Entity
+    throw new Error('Password must be at least 8 characters long');
+  }
 
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+  const salt = await bcrypt.genSalt(10);
+  const passwordHash = await bcrypt.hash(password, salt);
 
-    const researcher = await Researcher.create({
-      name,
-      institution,
-      email,
-      passwordHash,
+  const researcher = await Researcher.create({
+    name,
+    institution,
+    email,
+    passwordHash,
+  });
+
+  if (researcher) {
+    logger.info(`[Auth] Successfully registered researcher: ${researcher._id}`);
+    const token = generateToken(researcher._id.toString());
+    
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: env.NODE_ENV !== 'development',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
-    if (researcher) {
-      const token = generateToken(researcher._id.toString());
-      
-      // Set JWT in HTTPOnly cookie
-      res.cookie('jwt', token, {
-        httpOnly: true,
-        secure: env.NODE_ENV !== 'development', // Use secure cookies in production
-        sameSite: 'lax',
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      });
-
-      res.status(201).json({
-        _id: researcher._id,
-        name: researcher.name,
-        email: researcher.email,
-        institution: researcher.institution,
-      });
-    } else {
-      res.status(400).json({ message: 'Invalid researcher data' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.status(201).json({
+      _id: researcher._id,
+      name: researcher.name,
+      email: researcher.email,
+      institution: researcher.institution,
+    });
+  } else {
+    logger.error(`[Auth] Invalid researcher data during creation for: ${email}`);
+    res.status(400);
+    throw new Error('Invalid researcher data');
   }
-};
+});
 
-export const loginResearcher = async (req: Request, res: Response): Promise<void> => {
+export const loginResearcher = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  logger.info(`[Auth] Attempting login for email: ${email}`);
 
-  try {
-    const researcher = await Researcher.findOne({ email });
+  const researcher = await Researcher.findOne({ email });
 
-    if (researcher && (await bcrypt.compare(password, researcher.passwordHash))) {
-      const token = generateToken(researcher._id.toString());
-      
-      res.cookie('jwt', token, {
-        httpOnly: true,
-        secure: env.NODE_ENV !== 'development',
-        sameSite: 'lax',
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-      });
+  if (researcher && (await bcrypt.compare(password, researcher.passwordHash))) {
+    logger.info(`[Auth] Successful login for: ${researcher._id}`);
+    const token = generateToken(researcher._id.toString());
+    
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: env.NODE_ENV !== 'development',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
 
-      res.json({
-        _id: researcher._id,
-        name: researcher.name,
-        email: researcher.email,
-        institution: researcher.institution,
-      });
-    } else {
-      res.status(401).json({ message: 'Invalid email or password' });
-    }
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    res.json({
+      _id: researcher._id,
+      name: researcher.name,
+      email: researcher.email,
+      institution: researcher.institution,
+    });
+  } else {
+    logger.warn(`[Auth] Failed login attempt for email: ${email}`);
+    res.status(401);
+    throw new Error('Invalid email or password');
   }
-};
+});
 
 export const logoutResearcher = (req: Request, res: Response) => {
   res.cookie('jwt', '', {

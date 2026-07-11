@@ -10,6 +10,7 @@ import trialRoutes from './routes/trialRoutes';
 import protocolRoutes from './routes/protocolRoutes';
 import registryRoutes from './routes/registryRoutes';
 import collaborationRoutes from './routes/collaborationRoutes';
+import healthRoutes from './routes/healthRoutes';
 import { env, validateEnv } from './config/env';
 
 // Validate environment variables on startup
@@ -38,6 +39,16 @@ app.use((req, res, next) => {
   next();
 });
 
+import { notFound, errorHandler } from './middleware/errorHandler';
+import { logger } from './config/logger';
+
+// Catch Uncaught Exceptions immediately
+process.on('uncaughtException', (err) => {
+  logger.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  logger.error(err.name, err.message, err.stack);
+  process.exit(1);
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/upload', uploadRoutes);
@@ -47,11 +58,25 @@ app.use('/api/trials', trialRoutes);
 app.use('/api/protocols', protocolRoutes);
 app.use('/api/registry', registryRoutes);
 app.use('/api/collaboration', collaborationRoutes);
+app.use('/health', healthRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Error Handling Middleware
+app.use(notFound);
+app.use(errorHandler);
+
+const server = app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+});
+
+// Catch Unhandled Promise Rejections
+process.on('unhandledRejection', (err: any) => {
+  logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
+  logger.error(err.name, err.message, err.stack);
+  server.close(() => {
+    process.exit(1);
+  });
 });

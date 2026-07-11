@@ -39,7 +39,13 @@ export default function AuthPage() {
         router.push('/workspaces/dashboard');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Authentication failed. Please try again.');
+      if (!err.response) {
+        setError('Network error: The server could not be reached. If you are on Vercel, check NEXT_PUBLIC_API_URL.');
+      } else if (err.response.status === 502) {
+        setError('502 Bad Gateway: The backend API is unreachable or crashed on startup.');
+      } else {
+        setError(err.response?.data?.message || `Authentication failed (Status ${err.response.status}). Please try again.`);
+      }
     } finally {
       setLoading(false);
     }

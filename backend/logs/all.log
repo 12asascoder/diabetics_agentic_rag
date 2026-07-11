@@ -1,3 +1,11 @@
 [2026-07-11 10:17:09:179] warn: [Katzilla] Failed to fetch live trials: Action "clinical-trials" not found on agent "health". Falling back to local DB.
 [2026-07-11 10:17:10:1710] warn: [Katzilla] Failed to fetch live trials: Action "clinical-trials" not found on agent "health". Falling back to local DB.
 [2026-07-11 10:18:43:1843] warn: [Katzilla] Failed to fetch live trials: Action "clinical-trials" not found on agent "health". Falling back to local DB.
+[2026-07-11 11:41:47:4147] info: Server running on port 5005
+[2026-07-11 11:41:47:4147] info: Server running on port 5005
+[2026-07-11 11:42:15:4215] info: Server running on port 5005
+[2026-07-11 11:42:15:4215] info: Server running on port 5005
+[2026-07-11 11:42:17:4217] info: Server running on port 5005
+[2026-07-11 11:42:17:4217] info: Server running on port 5005
+[2026-07-11 11:42:35:4235] info: Server running on port 5005
+[2026-07-11 11:42:35:4235] info: Server running on port 5005
