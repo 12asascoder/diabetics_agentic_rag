@@ -1,75 +1,158 @@
 import Link from 'next/link';
-import { Brain, ArrowRight, Activity, ShieldCheck, Database } from 'lucide-react';
+import { FlaskConical, ChevronRight, Activity, FileCheck, Database, LineChart } from 'lucide-react';
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col font-sans selection:bg-blue-500/30">
-      <header className="px-8 py-6 flex justify-between items-center border-b border-gray-800/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <div className="bg-blue-600 p-2 rounded-lg">
-            <Brain className="text-white" size={24} />
-          </div>
-          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Diabetes AI Platform
-          </h1>
+    <div className="min-h-screen bg-neutral flex flex-col font-sans relative">
+      {/* Faint Background Grid */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none" 
+        style={{
+          backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
+      />
+
+      <header className="px-8 py-5 flex justify-between items-center z-10 bg-neutral/80 backdrop-blur-sm border-b border-gray-200">
+        <div className="flex items-center gap-2 font-heading font-bold text-lg text-primary">
+          <FlaskConical size={20} className="text-primary" />
+          <span>DiaResearch IQ</span>
         </div>
-        <nav className="flex gap-6 items-center text-sm font-medium">
-          <Link href="/about" className="text-gray-400 hover:text-white transition-colors">Platform</Link>
-          <Link href="/security" className="text-gray-400 hover:text-white transition-colors">Security</Link>
-          <Link href="/workspaces" className="bg-white text-black px-5 py-2 rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2">
-            Enter Platform <ArrowRight size={16} />
-          </Link>
+        <nav className="hidden md:flex gap-8 items-center text-sm font-medium text-secondary">
+          <Link href="#" className="hover:text-primary transition-colors">Platform</Link>
+          <Link href="#" className="hover:text-primary transition-colors">Solutions</Link>
+          <Link href="#" className="hover:text-primary transition-colors">Resources</Link>
+          <Link href="#" className="hover:text-primary transition-colors">Company</Link>
         </nav>
+        <div className="flex items-center gap-6 text-sm font-bold">
+          <Link href="#" className="text-primary hover:underline">Log In</Link>
+          <Link href="/workspaces" className="bg-primary text-white px-5 py-2.5 rounded hover:bg-primary/90 transition-colors">
+            Request Demo
+          </Link>
+        </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 py-32 relative overflow-hidden">
-        {/* Background Gradients */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
-
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-400 border border-blue-800/50 mb-8 text-sm font-medium">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-          </span>
-          Publication-Grade Research Engine v2.0
+      <main className="flex-1 flex flex-col items-center pt-16 pb-24 px-4 z-10 w-full max-w-7xl mx-auto">
+        <div className="bg-tertiary/10 text-tertiary px-3 py-1 rounded-full text-xs font-label mb-8 flex items-center gap-2 border border-tertiary/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          New available: Advanced Trial Matching Analytics v2.0
         </div>
 
-        <h2 className="text-5xl md:text-7xl font-bold max-w-4xl tracking-tight mb-8 leading-tight">
-          Accelerating <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Diabetes Research</span> through Multi-Agent AI
-        </h2>
+        <h1 className="text-5xl md:text-6xl font-heading font-bold text-primary max-w-3xl text-center leading-[1.1] tracking-tight mb-6">
+          Empowering Diabetes Research with Clinical Intelligence.
+        </h1>
         
-        <p className="text-xl text-gray-400 max-w-2xl mb-12 leading-relaxed">
-          The next-generation clinical intelligence platform. Featuring hybrid RAG, hierarchical evidence extraction, and real-time knowledge graph generation.
+        <p className="text-lg text-secondary max-w-2xl text-center mb-10 leading-relaxed">
+          Accelerate breakthrough discoveries with our unified platform for clinical data analysis, protocol management, and global registry integration.
         </p>
 
-        <div className="flex gap-4">
-          <Link href="/workspaces" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-medium transition-all hover:shadow-lg hover:shadow-blue-600/25 flex items-center gap-2">
-            Launch Workspaces <ArrowRight size={18} />
+        <div className="flex gap-4 mb-20">
+          <Link href="/workspaces" className="bg-primary text-white px-8 py-3.5 rounded font-medium hover:bg-primary/90 transition-colors shadow-sm">
+            Start Researching
           </Link>
-          <button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-4 rounded-full font-medium transition-colors border border-gray-700">
-            View Architecture
+          <button className="bg-white text-primary border border-gray-200 px-8 py-3.5 rounded font-medium hover:bg-gray-50 transition-colors shadow-sm">
+            Explore Methodology
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-32 max-w-5xl text-left w-full">
-          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
-            <Activity className="text-blue-400 mb-4" size={32} />
-            <h3 className="text-lg font-semibold mb-2">Multi-Agent Orchestration</h3>
-            <p className="text-gray-400 text-sm">Specialized agents route queries, evaluate evidence quality, detect contradictions, and synthesize publication-ready drafts.</p>
+        {/* Dashboard Mockup Container */}
+        <div className="w-full max-w-5xl bg-white rounded-xl shadow-xl border border-gray-200 p-2 mb-20">
+          <div className="bg-gray-50 rounded-lg h-[400px] border border-gray-100 flex items-center justify-center">
+            <span className="text-gray-400 text-sm font-label">Interactive Platform Mockup Placeholder</span>
           </div>
-          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
-            <Database className="text-purple-400 mb-4" size={32} />
-            <h3 className="text-lg font-semibold mb-2">Vector & Graph Fusion</h3>
-            <p className="text-gray-400 text-sm">Combines ChromaDB semantic similarity with explicit entity extraction to build navigable medical knowledge graphs.</p>
+        </div>
+
+        <div className="text-center w-full">
+          <p className="text-xs font-label tracking-widest text-gray-400 uppercase mb-8">Trusted by leading research institutions</p>
+          <div className="flex flex-wrap justify-center gap-12 text-secondary font-heading font-semibold text-lg opacity-80">
+            <span>Joslin Diabetes Center</span>
+            <span>Mayo Clinic</span>
+            <span>Johns Hopkins Medicine</span>
+            <span>Stanford Healthcare</span>
           </div>
-          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6">
-            <ShieldCheck className="text-green-400 mb-4" size={32} />
-            <h3 className="text-lg font-semibold mb-2">Clinical Safety First</h3>
-            <p className="text-gray-400 text-sm">Strict provenance tracking linking all generated claims directly to underlying document chunk IDs and metadata.</p>
+        </div>
+
+        {/* Section 2 */}
+        <div className="w-full mt-32">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-heading font-bold text-primary mb-4">Architected for Precision</h2>
+            <p className="text-secondary max-w-2xl mx-auto">
+              Our platform unifies disparate data streams into a cohesive, actionable interface, designed specifically for the rigorous demands of modern endocrinology research.
+            </p>
+          </div>
+
+          {/* Grid Layout matching Stitch */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Card 1 */}
+            <div className="md:col-span-2 bg-[#F1F5F9] rounded-xl p-8 border border-gray-200 relative overflow-hidden flex">
+              <div className="z-10 flex-1 pr-8">
+                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded flex items-center justify-center mb-6">
+                  <Activity size={20} />
+                </div>
+                <h3 className="text-xl font-heading font-bold text-primary mb-3">Dynamic Knowledge Graphs</h3>
+                <p className="text-secondary text-sm leading-relaxed max-w-md">
+                  Visualize complex relationships between genomic markers, phenotypic traits, and treatment outcomes in real-time. Uncover hidden correlations that standard tabular data obscures.
+                </p>
+              </div>
+              <div className="hidden md:flex items-center justify-center absolute right-8 top-1/2 -translate-y-1/2 opacity-30 text-secondary">
+                 <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200 flex flex-col">
+              <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded flex items-center justify-center mb-6">
+                <FileCheck size={20} />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-primary mb-3">Protocol Adherence</h3>
+              <p className="text-secondary text-sm leading-relaxed mb-6 flex-1">
+                Automated tracking of clinical trial milestones and regulatory compliance.
+              </p>
+              <Link href="#" className="text-xs font-label text-primary flex items-center gap-1 font-bold">
+                LEARN MORE <ChevronRight size={14} />
+              </Link>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-white rounded-xl p-8 border border-gray-200 flex flex-col">
+              <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded flex items-center justify-center mb-6">
+                <Database size={20} />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-primary mb-3">Registry Integration</h3>
+              <p className="text-secondary text-sm leading-relaxed mb-6 flex-1">
+                Seamlessly connect with global diabetes registries via secure FHIR APIs.
+              </p>
+              <Link href="#" className="text-xs font-label text-primary flex items-center gap-1 font-bold">
+                VIEW SPECS <ChevronRight size={14} />
+              </Link>
+            </div>
+
+            {/* Card 4 (Dark) */}
+            <div className="md:col-span-2 bg-primary text-white rounded-xl p-8 overflow-hidden relative flex">
+              <div className="z-10 flex-1 relative z-20">
+                <div className="w-10 h-10 bg-white/10 text-white rounded flex items-center justify-center mb-6 backdrop-blur-md border border-white/20">
+                  <LineChart size={20} />
+                </div>
+                <h3 className="text-xl font-heading font-bold mb-3">Predictive Cohort Modeling</h3>
+                <p className="text-white/70 text-sm leading-relaxed max-w-sm">
+                  Leverage machine learning algorithms to forecast disease progression and therapeutic response across stratified patient populations before initiating costly trials.
+                </p>
+              </div>
+              <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-gradient-to-l from-blue-500/20 to-transparent pointer-events-none z-10" />
+            </div>
+
           </div>
         </div>
       </main>
+
+      <footer className="px-8 py-8 border-t border-gray-200 flex justify-between items-center text-sm">
+        <div className="flex items-center gap-2 font-heading font-bold text-primary">
+          <FlaskConical size={18} />
+          <span>DiaResearch IQ</span>
+        </div>
+        <p className="text-gray-500">© 2024 DiaResearch Intelligence. All rights reserved for clinical use.</p>
+      </footer>
     </div>
   );
 }
