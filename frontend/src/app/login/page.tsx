@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import axios from 'axios';
+import { api } from '@/lib/api';
 import { useRouter } from 'next/navigation';
 import { useStore } from '@/lib/store';
 import Link from 'next/link';
@@ -30,9 +30,7 @@ export default function AuthPage() {
         ? { email, password } 
         : { name, institution, email, password };
 
-      const res = await axios.post(endpoint, payload, {
-        withCredentials: true
-      });
+      const res = await api.post(endpoint, payload);
 
       if (res.data && res.data._id) {
         setUser(res.data);
