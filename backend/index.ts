@@ -77,7 +77,20 @@ app.use(notFound);
 app.use(errorHandler);
 
 const server = app.listen(PORT, () => {
-  logger.info(`Server running on port ${PORT}`);
+  logger.info(`🚀 Server successfully started and running on port ${PORT}`);
+  logger.info(`✅ Environment: ${env.NODE_ENV}`);
+  logger.info(`✅ CORS Configured for frontend URL: ${frontendUrl}`);
+  logger.info(`--- Registered API Routes ---`);
+  logger.info(`  ➔ /api/auth`);
+  logger.info(`  ➔ /api/upload`);
+  logger.info(`  ➔ /api/agents`);
+  logger.info(`  ➔ /api/workspaces`);
+  logger.info(`  ➔ /api/trials`);
+  logger.info(`  ➔ /api/protocols`);
+  logger.info(`  ➔ /api/registry`);
+  logger.info(`  ➔ /api/collaboration`);
+  logger.info(`  ➔ /health`);
+  logger.info(`-----------------------------`);
 });
 
 // Catch Unhandled Promise Rejections
