@@ -2,6 +2,9 @@ import express from 'express';
 import { protect } from '../utils/authMiddleware';
 import RegistryItem from '../models/RegistryItem';
 import { logger } from '../config/logger';
+import fs from 'fs';
+import path from 'path';
+import csv from 'csv-parser';
 
 const router = express.Router();
 
@@ -11,6 +14,42 @@ router.get('/', protect, async (req, res) => {
     res.status(200).json(items);
   } catch (error: any) {
     logger.error(`[API] Error fetching registry items: ${error.message}`);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/seed', protect, async (req, res) => {
+  try {
+    const csvPath = path.resolve(__dirname, '../../diabetes.csv');
+    if (!fs.existsSync(csvPath)) {
+      return res.status(404).json({ message: 'diabetes.csv not found in root directory' });
+    }
+
+    const results: any[] = [];
+    fs.createReadStream(csvPath)
+      .pipe(csv())
+      .on('data', (data) => results.push(data))
+      .on('end', async () => {
+        try {
+          const itemsToCreate = results.slice(0, 100).map((row, index) => ({
+            itemType: 'Patient',
+            name: `Patient Record #${index + 1000}`,
+            description: `Diabetes Patient Record (Age: ${row.Age}, Outcome: ${row.Outcome})`,
+            tags: ['diabetes', 'csv-import', row.Outcome === '1' ? 'positive' : 'negative'],
+            metadata: row,
+            workspaceId: req.body.workspaceId,
+            createdBy: req.researcher._id
+          }));
+
+          await RegistryItem.insertMany(itemsToCreate);
+          res.status(201).json({ message: `Successfully seeded ${itemsToCreate.length} records from CSV` });
+        } catch (dbError: any) {
+          logger.error(`[API] DB Error during CSV seed: ${dbError.message}`);
+          res.status(500).json({ message: dbError.message });
+        }
+      });
+  } catch (error: any) {
+    logger.error(`[API] Error seeding registry: ${error.message}`);
     res.status(500).json({ message: error.message });
   }
 });

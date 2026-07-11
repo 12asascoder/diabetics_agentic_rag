@@ -33,7 +33,7 @@ export function DataTable<T>({
     if (!searchTerm) return data;
     const lowercasedSearch = searchTerm.toLowerCase();
     return data.filter(item => {
-      const keys = searchKeys.length > 0 ? searchKeys : Object.keys(item) as (keyof T)[];
+      const keys = searchKeys.length > 0 ? searchKeys : Object.keys(item as object) as (keyof T)[];
       return keys.some(key => {
         const val = item[key];
         return val && String(val).toLowerCase().includes(lowercasedSearch);

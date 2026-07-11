@@ -13,7 +13,10 @@ import {
   Users, 
   Settings, 
   HelpCircle,
-  Search
+  Search,
+  LineChart,
+  FileText,
+  MessagesSquare
 } from 'lucide-react';
 
 interface AppLayoutProps {
@@ -28,8 +31,11 @@ export default function AppLayout({ children }: AppLayoutProps) {
     { label: 'Workspace', href: '/workspaces/dashboard', icon: LayoutDashboard },
     { label: 'Document Library', href: '/library', icon: Library },
     { label: 'Evidence Explorer', href: '/evidence', icon: Microscope },
-    { label: 'Analytics', href: '/workspaces/dashboard', icon: BarChart2 },
-    { label: 'Collaboration', href: '/workspaces/dashboard', icon: Users },
+    { label: 'Research Registry', href: '/registry', icon: Users },
+    { label: 'Clinical Trials', href: '/trials', icon: FlaskConical },
+    { label: 'Protocols', href: '/protocols', icon: FileText },
+    { label: 'Analytics', href: '/analytics', icon: LineChart },
+    { label: 'Collaboration', href: '/collaboration', icon: MessagesSquare },
   ];
 
   return (
