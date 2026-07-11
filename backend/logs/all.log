@@ -2229,3 +2229,60 @@
 [2026-07-11 12:48:32:4832] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
 [2026-07-11 12:48:34:4834] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
 [2026-07-11 12:48:36:4836] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:40:5040] info: 🚀 Server successfully started and running on port 5005
+[2026-07-11 12:50:40:5040] info: ✅ Environment: development
+[2026-07-11 12:50:40:5040] info: ✅ CORS Configured for frontend URL: http://localhost:3000
+[2026-07-11 12:50:40:5040] info: --- Registered API Routes ---
+[2026-07-11 12:50:40:5040] info:   ➔ /api/auth
+[2026-07-11 12:50:40:5040] info:   ➔ /api/upload
+[2026-07-11 12:50:40:5040] info:   ➔ /api/agents
+[2026-07-11 12:50:40:5040] info:   ➔ /api/workspaces
+[2026-07-11 12:50:40:5040] info:   ➔ /api/trials
+[2026-07-11 12:50:40:5040] info:   ➔ /api/protocols
+[2026-07-11 12:50:40:5040] info:   ➔ /api/registry
+[2026-07-11 12:50:40:5040] info:   ➔ /api/collaboration
+[2026-07-11 12:50:40:5040] info:   ➔ /health
+[2026-07-11 12:50:40:5040] info: -----------------------------
+[2026-07-11 12:50:40:5040] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:41:5041] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:41:5041] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:41:5041] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:41:5041] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:41:5041] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:42:5042] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:42:5042] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:42:5042] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:43:5043] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:43:5043] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:44:5044] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:44:5044] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:45:5045] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:46:5046] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:47:5047] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:47:5047] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:48:5048] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:49:5049] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:50:5050] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:51:5051] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:52:5052] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:53:5053] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:54:5054] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:56:5056] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:57:5057] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:58:5058] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:50:59:5059] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:01:511] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:02:512] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:04:514] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:05:515] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:07:517] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:09:519] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:10:5110] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:12:5112] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:14:5114] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:16:5116] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:18:5118] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:20:5120] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:22:5122] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:24:5124] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.
+[2026-07-11 12:51:26:5126] error: 🚨 Redis connection refused. Document processing queue is offline. Ensure Redis is running on port 6379.

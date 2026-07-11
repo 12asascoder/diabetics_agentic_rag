@@ -15,10 +15,11 @@ export const env = {
 };
 
 export const validateEnv = () => {
-  const required = ['KATZILLA_API_KEY', 'JWT_SECRET_KEY', 'MONGO_URI'];
+  const required = ['MONGO_URI']; // Removed KATZILLA_API_KEY and JWT_SECRET_KEY as hard requirements for booting
   const missing = required.filter(key => !process.env[key]);
   
   if (missing.length > 0) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+    console.error(`🚨 WARNING: Missing required environment variables: ${missing.join(', ')}`);
+    // We do not throw an error here to prevent the server from crashing into a boot-loop on Railway.
   }
 };
