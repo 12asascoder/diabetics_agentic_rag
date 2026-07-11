@@ -20,7 +20,7 @@ export default function ProtocolsPage() {
     const fetchProtocols = async () => {
       try {
         setLoading(true);
-        const res = await axios.get('http://localhost:5000/api/protocols', {
+        const res = await axios.get('http://127.0.0.1:5005/api/protocols', {
           withCredentials: true
         });
         setProtocols(res.data);
