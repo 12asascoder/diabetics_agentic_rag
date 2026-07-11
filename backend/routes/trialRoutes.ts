@@ -20,7 +20,7 @@ router.get('/', protect, async (req, res) => {
         limit: 50
       });
       if (response && response.data && response.data.studies) {
-        liveTrials = response.data.studies;
+        liveTrials = response.data.studies as any[];
       }
     } catch (kzError: any) {
       logger.warn(`[Katzilla] Failed to fetch live trials: ${kzError.message}. Falling back to local DB.`);
