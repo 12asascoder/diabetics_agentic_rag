@@ -22,9 +22,15 @@ const PORT = env.PORT;
 // Connect to database
 connectDB();
 
+let frontendUrl = env.FRONTEND_URL;
+if (frontendUrl.endsWith('/')) {
+  frontendUrl = frontendUrl.slice(0, -1);
+}
+const allowedOrigins = ['http://localhost:3000', frontendUrl];
+
 // Middleware
 app.use(cors({
-  origin: env.FRONTEND_URL,
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
