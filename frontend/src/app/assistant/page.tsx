@@ -73,7 +73,7 @@ export default function AIResearchAssistant() {
               <div className={`max-w-[80%] rounded-2xl p-4 ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-slate-100 dark:bg-slate-800/50 rounded-tl-none'}`}>
                 <div 
                   className="prose dark:prose-invert max-w-none text-sm"
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(msg.content) }}
+                  dangerouslySetInnerHTML={{ __html: typeof window !== 'undefined' ? DOMPurify.sanitize(msg.content) : msg.content }}
                 />
                 
                 {msg.citations && msg.citations.length > 0 && (
